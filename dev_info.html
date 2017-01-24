@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en-RU" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация для разработчика</title>
+
+    <link rel="stylesheet" href="css/reset.css"/>
+    <link rel="stylesheet" href="css/dev_info.html.css"/>
+
+    <script src="js/jquery-3.1.1.js"></script>
+    <script src="js/angular-1.6.js"></script>
+    <script src="js/vk.js"></script>
+    <script>
+        var app = angular.module('app', []);
+        app.controller('appController', ['$scope',
+            function ($scope) {
+                $scope.albums = null
+                $scope.albumsErr = null
+                $scope.thumbPhotos = null
+                $scope.userOrGroupId = "185014513"
+                $scope.lastUserOrGroupId = null
+                $scope.userOrGroupInfo = null
+
+                function getAlbums(ownerId) {
+                    $scope.$applyAsync(function () {
+                        $scope.albums = null
+                        $scope.albumsErr = null
+                    })
+
+                    Vk.call("photos.getAlbums", "owner_id=" + ownerId, function (data) {
+                        if (!data.response) {
+                            $scope.$applyAsync(function () {
+                                $scope.albumsErr = data
+                            })
+                            return;
+                        }
+
+                        var albums = data.response.items
+
+                        $scope.$applyAsync(function () {
+                            $scope.albums = albums
+                        })
+
+                        var albumThumbIds = albums
+                            .map(function (album) {
+                                return album["thumb_id"]
+                            })
+                            .filter(function (thumbId) {
+                                return thumbId != 0
+                            })
+
+                        var albumThumbIdsForPhotosRequest = albumThumbIds
+                            .map(function (thumbId) {
+                                return ownerId + '_' + thumbId
+                            })
+
+                        Vk.call("photos.getById", "photos=" + albumThumbIdsForPhotosRequest.toString(), function (data) {
+                            if (!data.response) return
+
+                            var thumbPhotosResponse = data.response;
+                            var scopeThumbPhotos = {}
+
+                            thumbPhotosResponse.forEach(function (thumbPhoto) {
+                                scopeThumbPhotos[thumbPhoto.id] = thumbPhoto
+                            })
+
+                            $scope.$applyAsync(function () {
+                                $scope.thumbPhotos = scopeThumbPhotos
+                            })
+                        })
+
+                    });
+                }
+
+                $scope.applyGroupId = function () {
+
+                    if (!$scope.userOrGroupId.length) return;
+
+                    if ($scope.lastUserOrGroupId != $scope.userOrGroupId) {
+                        // Check if user
+                        Vk.call("users.get", "fields=screen_name&user_ids=" + Vk.clearId($scope.userOrGroupId), function (data) {
+                            var userInfo = (data.response) ? data.response[0] : null
+                            if (userInfo) {
+                                $scope.$apply(function () {
+                                    $scope.userOrGroupInfo = {
+                                        name: userInfo.first_name + ' ' + userInfo.last_name,
+                                        id: userInfo.id,
+                                        screen_name: userInfo.screen_name,
+                                        is_group: false
+                                    }
+                                })
+                                getAlbums(userInfo.id)
+                            }
+                            if (!userInfo || $scope.userOrGroupId[0] == '-')
+                                Vk.call("groups.getById", "group_id=" + Vk.clearId($scope.lastUserOrGroupId), function (data) {
+                                    var groupInfo = (data.response) ? data.response[0] : null
+                                    if (groupInfo) {
+                                        $scope.$apply(function () {
+                                            $scope.userOrGroupInfo = {
+                                                name: groupInfo.name,
+                                                id: groupInfo.id,
+                                                screen_name: groupInfo.screen_name,
+                                                is_group: true
+                                            }
+                                        })
+                                        getAlbums('-' + groupInfo.id)
+                                    }
+                                })
+                        })
+                    }
+
+                    $scope.lastUserOrGroupId = $scope.userOrGroupId
+                }
+            }]);
+    </script>
+</head>
+<body ng-controller="appController">
+<div class="inputGroup text-center">
+    <div><b>ID/Никнейм группы или человека в ВК</b></div>
+    <div style="margin-bottom: 0"><input type="text" title="ID группы" class="text-center" ng-model="userOrGroupId">
+    </div>
+    <div><i class="tip">*ID группы желательно писать со знаком <b style="font-size: 150%">-</b></i></div>
+    <div>
+        <button ng-click="applyGroupId()">Показать</button>
+    </div>
+</div>
+
+<div class="info" ng-if="userOrGroupInfo">
+    <h1 class="name">{{userOrGroupInfo.name}}</h1>
+    <h2 class="id">id{{userOrGroupInfo.id}}</h2>
+    <h3 class="screen-name" ng-if="userOrGroupInfo.screen_name != 'id'+userOrGroupInfo.id">
+        {{userOrGroupInfo.screen_name}}</h3>
+</div>
+<div class="albums" ng-if="albums">
+    <h1 class="title">Альбомы</h1>
+
+    <table class="border-table">
+        <tr>
+            <th>album id</th>
+            <th>thumb</th>
+            <th>title</th>
+            <th>size</th>
+        </tr>
+        <tr ng-repeat="album in albums | orderBy: '-size'">
+            <td>{{album.id}}</td>
+            <td><img ng-src="{{thumbPhotos[album.thumb_id].photo_75}}"/></td>
+            <td>{{album.title}}</td>
+            <td>{{album.size}}</td>
+        </tr>
+    </table>
+</div>
+<div class="code" ng-if="albums || albumsErr">
+    <small>JSON ответ: альбомы</small>
+    <pre ng-if="albums">{{albums|json}}</pre>
+    <pre ng-if="albumsErr">{{albumsErr|json}}</pre>
+</div>
+</body>
+</html>
