@@ -1,1 +1,73 @@
-<h1>Hello world</h1>
+<!doctype html>
+<html lang="en-RU" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Creative designer portfolio</title>
+
+    <link rel="stylesheet" href="css/reset.css"/>
+
+    <script src="js/jquery-3.1.1.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/vk.js"></script>
+
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 16px;
+        }
+        article {
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+        }
+        #nav {
+            margin-bottom: 20px;
+        }
+        #nav nav {
+            text-align: center;
+        }
+        #nav nav span {
+            display: inline-block;
+            padding: 5px;
+            border-bottom: 1px solid grey;
+            margin: 5px;
+        }
+        #nav nav span:hover {
+            background: grey;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        $(function () {
+            var $imageBlock = $("#images")
+            var $navBlock = $("#nav nav")
+
+            $navBlock.on("click", "span", function () {
+                var selectedAlbumId = $(this).attr("data-id")
+                Vk.showAlbum(GROUP_ID, selectedAlbumId, $imageBlock);
+            })
+
+            Vk.call("photos.getAlbums", "owner_id=-"+GROUP_ID, function (data) {
+                if (!data.response) return
+                data.response.items.forEach(function (album) {
+                    $navBlock.append("<span data-id=\""+album.id+"\">"+album.title+"</span>")
+                })
+            })
+
+            Vk.showAlbum(GROUP_ID, MAIN_ALBUM_ID, $imageBlock);
+        })
+    </script>
+</head>
+<body>
+    <section id="nav">
+        <nav>
+
+        </nav>
+    </section>
+    <section id="images">
+
+    </section>
+</body>
+</html>
