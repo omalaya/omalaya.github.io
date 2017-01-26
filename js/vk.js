@@ -38,10 +38,14 @@ Vk.maxPhotoSrc = function (photoObj) {
 Vk.showAlbumsNav = function (groupId, $selector) {
     Vk.call("photos.getAlbums", "owner_id=" + groupId, function (data) {
         if (!data.response) return
+        console.log("Nav:")
+        console.log(data)
 
+        $selector.append("<ul>")
         data.response.items.forEach(function (album) {
-            $selector.append("<span data-id=\"" + album.id + "\">" + album.title + "</span>")
+            $selector.append("<li style='border-color:"+album.description+"' data-id=\"" + album.id + "\"><div style='background: "+album.description+"'></div><span>"+album.title + "</span></li>")
         })
+        $selector.append("</ul>")
     })
 }
 
@@ -63,11 +67,11 @@ Vk.showAlbum = function (groupId, albumId, $selector) {
         })
 
         $selector.justifiedGallery({
-            rowHeight : $(window).height()/5,
+            rowHeight : 150,
             maxHeight: $(window).height(),
             rel : 'gallery1',
             lastRow : 'nojustify',
-            margins : 0
+            margins : 10
         }).on('jg.complete', function () {
             $(this).find('a').colorbox({
                 maxWidth : '95%',

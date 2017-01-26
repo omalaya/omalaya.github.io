@@ -5,6 +5,7 @@
     <title>Creative designer portfolio</title>
 
     <link rel="stylesheet" href="css/reset.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
 
     <link rel="stylesheet" href="lib/gallery/justifiedGallery.min.css"/>
     <link rel="stylesheet" href="lib/colorbox/colorbox.css"/>
@@ -20,14 +21,27 @@
 
     <style>
         body {
-            font-family: sans-serif;
+            font-family: 'Roboto', sans-serif;
             font-size: 16px;
         }
 
+        header {
+            text-align: right;
+            margin: 20px 10%;
+            line-height: 1.1;
+            color: #333;
+        }
+        header h1 {
+            font-size: 60px;
+            font-weight: normal;
+        }
+        header h2 {
+            font-size: 40px;
+        }
+
         #images {
-            width: 800px;
+            max-width: 1024px;
             margin: 0 auto;
-            padding: 10px;
             background: #fff
         }
 
@@ -39,38 +53,54 @@
             max-width: 100%;
         }
 
+        /* Navigation */
         #nav {
-            margin-bottom: 20px;
-        }
-
-        #nav nav {
             text-align: center;
         }
-
-        #nav nav span {
+        #nav li {
             display: inline-block;
-            padding: 5px;
-            border-bottom: 1px solid grey;
-            margin: 5px;
-        }
-
-        #nav nav span:hover {
-            background: grey;
-            color: #fff;
+            text-align: center;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #111;
             cursor: pointer;
         }
+
+        #nav li div {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 5px;
+        }
+        #nav li span {
+            display: block;
+            color: #111;
+            font-size: 20px;
+            text-transform: lowercase;
+        }
+
     </style>
     <script>
         $(function () {
-            var $imageBlock = $("#images")
-            var $navBlock = $("#nav nav")
 
+            var $imageBlock = $("#images")
+            var $navBlock = $("#nav")
 
             var groupId = "-" + GROUP_ID
 
             Vk.showAlbumsNav(groupId, $navBlock);
 
-            $navBlock.on("click", "span", function () {
+            $navBlock.on("mouseenter", "li", function () {
+                var bgColor = $(this).find("div").css("background");
+                $(this).css("background", bgColor)
+                $(this).find("span").css("color", "#fff")
+            })
+            $navBlock.on("mouseleave", "li", function () {
+                $(this).css("background", "#fff")
+                $(this).find("span").css("color", "#111")
+            })
+
+            $navBlock.on("click", "li", function () {
                 var selectedAlbumId = $(this).attr("data-id")
                 Vk.showAlbum(groupId, selectedAlbumId, $imageBlock);
             })
@@ -79,10 +109,12 @@
     </script>
 </head>
 <body>
+<header>
+    <h1>Olga Malaya</h1>
+    <h2>- creative designer portfolio</h2>
+</header>
 <section id="nav">
-    <nav>
 
-    </nav>
 </section>
 <section id="images">
 
