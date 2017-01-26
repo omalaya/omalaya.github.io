@@ -54,7 +54,27 @@ Vk.showAlbum = function (groupId, albumId, $selector) {
         $selector.html('')
         data.response.items.forEach(function (photo) {
             var src = Vk.maxPhotoSrc(photo)
-            $selector.append("<article><img src=\"" + src + "\" /></article>")
+            var element = "<a href='" + src + "'><img  src=\"" + src + "\" /></a>";
+
+            if ($selector.html() == '')
+                $selector.append(element)
+            else
+                $selector.children().last().after(element)
         })
+
+        $selector.justifiedGallery({
+            rowHeight : $(window).height()/2,
+            rel : 'gallery1',
+            lastRow : 'nojustify',
+            margins : 5
+        }).on('jg.complete', function () {
+            $(this).find('a').colorbox({
+                maxWidth : '80%',
+                maxHeight : '80%',
+                opacity : 0.9,
+                transition : 'elastic',
+                current : ''
+            });
+        });
     })
 }

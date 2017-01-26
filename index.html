@@ -6,9 +6,17 @@
 
     <link rel="stylesheet" href="css/reset.css"/>
 
+    <link rel="stylesheet" href="lib/gallery/justifiedGallery.min.css"/>
+    <link rel="stylesheet" href="lib/colorbox/colorbox.css"/>
+
     <script src="js/jquery-3.1.1.js"></script>
+    <script src="lib/gallery/jquery.justifiedGallery.min.js"></script>
+    <script src="lib/colorbox/jquery.colorbox-min.js"></script>
+    <script src="lib/colorbox/jquery.colorbox-ru.js"></script>
+
     <script src="js/config.js"></script>
     <script src="js/vk.js"></script>
+
 
     <style>
         body {
@@ -58,6 +66,7 @@
                 var selectedAlbumId = $(this).attr("data-id")
                 Vk.showAlbum(groupId, selectedAlbumId, $imageBlock);
             })
+
         })
     </script>
 </head>
@@ -67,7 +76,7 @@
 
     </nav>
 </section>
-<section id="images">
+<section id="images" style="width: 960px; margin: 0 auto">
 
 </section>
 </body>
