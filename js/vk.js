@@ -2,9 +2,9 @@
  * Created by Alex on 23.01.2017.
  */
 var Vk = {};
-Vk.call = function(methodName, args, callback) {
+Vk.call = function (methodName, args, callback) {
     $.ajax({
-        url: 'https://api.vk.com/method/'+methodName+'?'+args+"&v=5.62",
+        url: 'https://api.vk.com/method/' + methodName + '?' + args + "&v=5.62",
         type: 'GET',
         dataType: 'jsonp',
         crossDomain: true,
@@ -35,9 +35,18 @@ Vk.maxPhotoSrc = function (photoObj) {
     return null
 }
 
+Vk.showAlbumsNav = function (groupId, $selector) {
+    Vk.call("photos.getAlbums", "owner_id=" + groupId, function (data) {
+        if (!data.response) return
 
-Vk.showAlbum = function(groupId, albumId, $selector) {
-    var args = "owner_id=-" + groupId + "&album_id=" + albumId;
+        data.response.items.forEach(function (album) {
+            $selector.append("<span data-id=\"" + album.id + "\">" + album.title + "</span>")
+        })
+    })
+}
+
+Vk.showAlbum = function (groupId, albumId, $selector) {
+    var args = "owner_id=" + groupId + "&album_id=" + albumId;
     Vk.call("photos.get", args, function (data) {
         console.log(data)
         if (!data.response) return

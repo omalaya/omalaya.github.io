@@ -15,24 +15,30 @@
             font-family: sans-serif;
             font-size: 16px;
         }
+
         article {
             text-align: center;
         }
+
         img {
             max-width: 100%;
         }
+
         #nav {
             margin-bottom: 20px;
         }
+
         #nav nav {
             text-align: center;
         }
+
         #nav nav span {
             display: inline-block;
             padding: 5px;
             border-bottom: 1px solid grey;
             margin: 5px;
         }
+
         #nav nav span:hover {
             background: grey;
             color: #fff;
@@ -44,30 +50,25 @@
             var $imageBlock = $("#images")
             var $navBlock = $("#nav nav")
 
+            var groupId = "-" + GROUP_ID
+
+            Vk.showAlbumsNav(groupId, $navBlock);
+
             $navBlock.on("click", "span", function () {
                 var selectedAlbumId = $(this).attr("data-id")
-                Vk.showAlbum(GROUP_ID, selectedAlbumId, $imageBlock);
+                Vk.showAlbum(groupId, selectedAlbumId, $imageBlock);
             })
-
-            Vk.call("photos.getAlbums", "owner_id=-"+GROUP_ID, function (data) {
-                if (!data.response) return
-                data.response.items.forEach(function (album) {
-                    $navBlock.append("<span data-id=\""+album.id+"\">"+album.title+"</span>")
-                })
-            })
-
-            Vk.showAlbum(GROUP_ID, MAIN_ALBUM_ID, $imageBlock);
         })
     </script>
 </head>
 <body>
-    <section id="nav">
-        <nav>
+<section id="nav">
+    <nav>
 
-        </nav>
-    </section>
-    <section id="images">
+    </nav>
+</section>
+<section id="images">
 
-    </section>
+</section>
 </body>
 </html>
