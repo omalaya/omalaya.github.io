@@ -70,8 +70,8 @@ Vk.showAlbum = function (groupId, albumId, $selector) {
             margins : 5
         }).on('jg.complete', function () {
             $(this).find('a').colorbox({
-                maxWidth : '80%',
-                maxHeight : '80%',
+                maxWidth : '90%',
+                maxHeight : '90%',
                 opacity : 0.9,
                 transition : 'elastic',
                 current : ''
