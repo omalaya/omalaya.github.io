@@ -67,7 +67,7 @@ Vk.showAlbum = function (groupId, albumId, $selector) {
             maxHeight: $(window).height(),
             rel : 'gallery1',
             lastRow : 'nojustify',
-            margins : 5
+            margins : 0
         }).on('jg.complete', function () {
             $(this).find('a').colorbox({
                 maxWidth : '95%',
