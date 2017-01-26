@@ -64,6 +64,7 @@ Vk.showAlbum = function (groupId, albumId, $selector) {
 
         $selector.justifiedGallery({
             rowHeight : $(window).height()/2,
+            maxHeight: $(window).height(),
             rel : 'gallery1',
             lastRow : 'nojustify',
             margins : 5
