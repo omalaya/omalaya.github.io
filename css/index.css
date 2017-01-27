@@ -25,18 +25,6 @@ header h2 {
     font-size: 40px;
 }
 
-
-/* Images */
-
-#images {
-    max-width: 1024px;
-    background: #fff;
-    margin: 5% auto;
-}
-
-#images img { max-width: 100% }
-
-
 /* Navigation */
 
 #nav { text-align: center }
@@ -71,3 +59,14 @@ header h2 {
     font-size: 20px;
     text-transform: lowercase;
 }
+
+
+/* Images */
+
+#images {
+    max-width: 1024px;
+    background: #fff;
+    margin: 5% auto;
+}
+
+#images img { max-width: 100% }
