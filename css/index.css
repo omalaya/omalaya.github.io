@@ -1,0 +1,72 @@
+
+/* General */
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+}
+
+header {
+    text-align: right;
+    margin: 20px 10%;
+    line-height: 1.1;
+    color: #333;
+}
+
+/* Header */
+
+header h1 {
+    font-size: 60px;
+    font-weight: normal;
+}
+
+header h2 {
+    font-size: 40px;
+}
+
+
+/* Images */
+
+#images {
+    max-width: 1024px;
+    margin: 0 auto;
+    background: #fff
+}
+
+#images img { max-width: 100% }
+
+
+/* Navigation */
+
+#nav { text-align: center }
+
+#nav li {
+    display: inline-block;
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #111;
+    cursor: pointer;
+}
+
+#nav li:hover {
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+
+#nav li div {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 5px;
+}
+
+#nav li span {
+    display: block;
+    color: #111;
+    font-size: 20px;
+    text-transform: lowercase;
+}

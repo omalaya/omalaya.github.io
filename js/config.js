@@ -1,21 +1,29 @@
-const GROUP_ID = "138622410"
-const MAIN_ALBUM_ID = "227509359"
+const DefaultGroupId = "138622410"
+var GroupId = '-' + DefaultGroupId
 
-var galleryConfig_defaultHeight = 150
-var galleryConfig = {
-    rowHeight : galleryConfig_defaultHeight,
-    maxHeight: $(window).height(),
-    rel : 'gallery1',
-    lastRow : 'nojustify',
-    margins : 10
-}
+var DefaultAlbumColor = "#757575"
 
-var colorboxConfig = {
-    maxWidth : '95%',
-    maxHeight : '90%',
-    opacity : 0.9,
-    transition : 'elastic',
-    current : ''
+var NavItem = {
+    bgColor: "#fff",
+    textColor: "#111",
+    hoverTextColor: "#fff"
 }
 
 var Albums = null
+
+var DefaultRowHeight = 150,
+    GalleryConfig = {
+        rowHeight: DefaultRowHeight,
+        maxHeight: $(window).height(),
+        rel: 'gallery1',
+        lastRow: 'nojustify',
+        margins: 10
+    }
+
+var ColorboxConfig = {
+    maxWidth: '95%',
+    maxHeight: '90%',
+    opacity: 0.9,
+    transition: 'elastic',
+    current: ''
+}

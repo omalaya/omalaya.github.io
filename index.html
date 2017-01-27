@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <title>Creative designer portfolio</title>
 
-    <link rel="stylesheet" href="css/reset.css"/>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/reset.css"/>
+    <link rel="stylesheet" href="css/index.css"/>
 
     <link rel="stylesheet" href="lib/gallery/justifiedGallery.min.css"/>
     <link rel="stylesheet" href="lib/colorbox/colorbox.css"/>
+
 
     <script src="js/jquery-3.1.1.js"></script>
     <script src="lib/gallery/jquery.justifiedGallery.min.js"></script>
@@ -17,102 +20,18 @@
 
     <script src="js/config.js"></script>
     <script src="js/vk.js"></script>
+    <script src="js/func.js"></script>
 
-
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            font-size: 16px;
-        }
-
-        header {
-            text-align: right;
-            margin: 20px 10%;
-            line-height: 1.1;
-            color: #333;
-        }
-        header h1 {
-            font-size: 60px;
-            font-weight: normal;
-        }
-        header h2 {
-            font-size: 40px;
-        }
-
-        #images {
-            max-width: 1024px;
-            margin: 0 auto;
-            background: #fff
-        }
-
-        article {
-            text-align: center;
-        }
-
-        img {
-            max-width: 100%;
-        }
-
-        /* Navigation */
-        #nav {
-            text-align: center;
-        }
-        #nav li {
-            display: inline-block;
-            text-align: center;
-            margin: 10px;
-            padding: 10px;
-            border: 1px solid #111;
-            cursor: pointer;
-        }
-
-        #nav li:hover {
-            -webkit-transition: all 0.2s ease;
-            -moz-transition: all 0.2s ease;
-            -ms-transition: all 0.2s ease;
-            -o-transition: all 0.2s ease;
-            transition: all 0.2s ease;
-        }
-        #nav li div {
-            display: inline-block;
-            width: 100px;
-            height: 100px;
-            margin-bottom: 5px;
-        }
-        #nav li span {
-            display: block;
-            color: #111;
-            font-size: 20px;
-            text-transform: lowercase;
-        }
-
-    </style>
     <script>
         $(function () {
+            window.$Nav = $("#nav")
+            window.$Images = $("#images")
 
-            var $imageBlock = $("#images")
-            var $navBlock = $("#nav")
+            Vk.showAlbumsNav(GroupId, $Nav)
 
-            var groupId = "-" + GROUP_ID
-
-            Vk.showAlbumsNav(groupId, $navBlock);
-
-            $navBlock.on("mouseenter", "li", function () {
-                var bgColor = $(this).find("div").css("background");
-                $(this).css("background", bgColor)
-                $(this).find("span").css("color", "#fff")
-            })
-            $navBlock.on("mouseleave", "li", function () {
-                $(this).css("background", "#fff")
-                $(this).find("span").css("color", "#111")
-            })
-
-            $navBlock.on("click", "li", function () {
-                var selectedAlbumId = $(this).attr("data-id")
-                Vk.updateAlbumPhotoHeight(selectedAlbumId)
-                Vk.showAlbum(groupId, selectedAlbumId, $imageBlock);
-            })
-
+            $Nav.on("mouseenter", "li", navItem_mouseenter)
+            $Nav.on("mouseleave", "li", navItem_mouseleave)
+            $Nav.on("click", "li", album_click)
         })
     </script>
 </head>
@@ -121,11 +40,7 @@
     <h1>Olga Malaya</h1>
     <h2>- creative designer portfolio</h2>
 </header>
-<section id="nav">
-
-</section>
-<section id="images">
-
-</section>
+<section id="nav"></section>
+<section id="images"></section>
 </body>
 </html>
