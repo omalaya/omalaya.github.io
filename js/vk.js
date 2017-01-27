@@ -18,7 +18,7 @@ Vk.showAlbumsNav = function (groupId, $nav) {
         if (!data.response) return
         var albums = Albums = data.response.items
 
-        $nav.append("<ul>")
+        $ul = $tag("ul")
 
         albums.forEach(function (album) {
             Albums['id' + album.id] = album
@@ -30,10 +30,10 @@ Vk.showAlbumsNav = function (groupId, $nav) {
 
             $navItem.append($square, $title)
 
-            $nav.append($navItem)
+            $ul.append($navItem)
         })
 
-        $nav.append("</ul>")
+        $nav.append($ul)
     })
 }
 
