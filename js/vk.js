@@ -58,8 +58,9 @@ Vk.showAlbum = function (groupId, albumId, $selector) {
 
         $selector.html('')
         data.response.items.forEach(function (photo) {
+            console.log(photo)
             var src = Vk.maxPhotoSrc(photo)
-            var element = "<a href='" + src + "'><img  src=\"" + src + "\" /></a>";
+            var element = "<a title='"+photo.text+"' href='" + src + "'><img alt='"+photo.text+"'  src=\"" + src + "\" /></a>";
 
             if ($selector.html() == '')
                 $selector.append(element)
@@ -76,7 +77,7 @@ Vk.showAlbum = function (groupId, albumId, $selector) {
         }).on('jg.complete', function () {
             $(this).find('a').colorbox({
                 maxWidth : '95%',
-                maxHeight : '95%',
+                maxHeight : '90%',
                 opacity : 0.9,
                 transition : 'elastic',
                 current : ''
