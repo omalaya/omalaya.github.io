@@ -43,7 +43,8 @@ Vk.showAlbumsNav = function (groupId, $selector) {
 
         $selector.append("<ul>")
         data.response.items.forEach(function (album) {
-            $selector.append("<li style='border-color:"+album.description+"' data-id=\"" + album.id + "\"><div style='background: "+album.description+"'></div><span>"+album.title + "</span></li>")
+            var bgColor = (album.description) ? album.description : "#757575"
+            $selector.append("<li style='border-color:"+bgColor+"' data-id=\"" + album.id + "\"><div style='background: "+bgColor+"'></div><span>"+album.title + "</span></li>")
         })
         $selector.append("</ul>")
     })
