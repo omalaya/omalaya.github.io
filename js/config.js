@@ -1,8 +1,9 @@
 const GROUP_ID = "138622410"
 const MAIN_ALBUM_ID = "227509359"
 
+var galleryConfig_defaultHeight = 150
 var galleryConfig = {
-    rowHeight : 150,
+    rowHeight : galleryConfig_defaultHeight,
     maxHeight: $(window).height(),
     rel : 'gallery1',
     lastRow : 'nojustify',
@@ -16,3 +17,5 @@ var colorboxConfig = {
     transition : 'elastic',
     current : ''
 }
+
+var Albums = null

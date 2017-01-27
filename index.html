@@ -109,6 +109,7 @@
 
             $navBlock.on("click", "li", function () {
                 var selectedAlbumId = $(this).attr("data-id")
+                Vk.updateAlbumPhotoHeight(selectedAlbumId)
                 Vk.showAlbum(groupId, selectedAlbumId, $imageBlock);
             })
 

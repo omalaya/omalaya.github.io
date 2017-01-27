@@ -35,17 +35,47 @@ Vk.maxPhotoSrc = function (photoObj) {
     return null
 }
 
+Vk.albumBgColor = function (album) {
+    var descrArgs = album.description.split("\n")
+    var bgColor = descrArgs[0]
+    if (bgColor[0] = '#')
+        return bgColor
+    else
+        return "#757575"
+}
+
+Vk.updateAlbumPhotoHeight = function (id) {
+    var album = Albums['id' + id];
+    var descriptionArgs = album.description.split("\n")
+
+    var heightArg = descriptionArgs[1] || '';
+    var hasHeight = heightArg.indexOf("height") !== -1
+
+    if (hasHeight) {
+        var heightVal = heightArg.split("height")[1];
+        galleryConfig.rowHeight = parseInt(heightVal || galleryConfig_defaultHeight)
+    }
+    else
+        galleryConfig.rowHeight = galleryConfig_defaultHeight
+
+}
+
 Vk.showAlbumsNav = function (groupId, $selector) {
     Vk.call("photos.getAlbums", "owner_id=" + groupId, function (data) {
         if (!data.response) return
+        var albums = Albums = data.response.items
+
         console.log("Nav:")
-        console.log(data)
+        console.log(albums)
 
         $selector.append("<ul>")
-        data.response.items.forEach(function (album) {
-            var bgColor = (album.description) ? album.description : "#757575"
+
+        albums.forEach(function (album) {
+            Albums['id' + album.id] = album
+            var bgColor = Vk.albumBgColor(album)
             $selector.append("<li style='border-color:" + bgColor + "' data-id=\"" + album.id + "\"><div style='background: " + bgColor + "'></div><span>" + album.title + "</span></li>")
         })
+
         $selector.append("</ul>")
     })
 }
@@ -53,12 +83,10 @@ Vk.showAlbumsNav = function (groupId, $selector) {
 Vk.showAlbum = function (groupId, albumId, $selector) {
     var args = "owner_id=" + groupId + "&album_id=" + albumId;
     Vk.call("photos.get", args, function (data) {
-        console.log(data)
         if (!data.response) return
 
         $selector.html('')
         data.response.items.forEach(function (photo) {
-            console.log(photo)
             var src = Vk.maxPhotoSrc(photo)
             var element = "<a title='" + photo.text + "' href='" + src + "'><img alt='" + photo.text + "'  src=\"" + src + "\" /></a>";
 
