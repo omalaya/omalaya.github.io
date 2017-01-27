@@ -44,7 +44,7 @@ Vk.showAlbumsNav = function (groupId, $selector) {
         $selector.append("<ul>")
         data.response.items.forEach(function (album) {
             var bgColor = (album.description) ? album.description : "#757575"
-            $selector.append("<li style='border-color:"+bgColor+"' data-id=\"" + album.id + "\"><div style='background: "+bgColor+"'></div><span>"+album.title + "</span></li>")
+            $selector.append("<li style='border-color:" + bgColor + "' data-id=\"" + album.id + "\"><div style='background: " + bgColor + "'></div><span>" + album.title + "</span></li>")
         })
         $selector.append("</ul>")
     })
@@ -60,7 +60,7 @@ Vk.showAlbum = function (groupId, albumId, $selector) {
         data.response.items.forEach(function (photo) {
             console.log(photo)
             var src = Vk.maxPhotoSrc(photo)
-            var element = "<a title='"+photo.text+"' href='" + src + "'><img alt='"+photo.text+"'  src=\"" + src + "\" /></a>";
+            var element = "<a title='" + photo.text + "' href='" + src + "'><img alt='" + photo.text + "'  src=\"" + src + "\" /></a>";
 
             if ($selector.html() == '')
                 $selector.append(element)
@@ -68,20 +68,9 @@ Vk.showAlbum = function (groupId, albumId, $selector) {
                 $selector.children().last().after(element)
         })
 
-        $selector.justifiedGallery({
-            rowHeight : 150,
-            maxHeight: $(window).height(),
-            rel : 'gallery1',
-            lastRow : 'nojustify',
-            margins : 10
-        }).on('jg.complete', function () {
-            $(this).find('a').colorbox({
-                maxWidth : '95%',
-                maxHeight : '90%',
-                opacity : 0.9,
-                transition : 'elastic',
-                current : ''
+        $selector.justifiedGallery(galleryConfig)
+            .on('jg.complete', function () {
+                $(this).find('a').colorbox(colorboxConfig);
             });
-        });
     })
 }
