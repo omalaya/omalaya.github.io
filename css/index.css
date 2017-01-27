@@ -6,14 +6,15 @@ body {
     font-size: 16px;
 }
 
+
+/* Header */
+
 header {
     text-align: right;
-    margin: 20px 10%;
+    margin: 5%;
     line-height: 1.1;
     color: #333;
 }
-
-/* Header */
 
 header h1 {
     font-size: 60px;
@@ -29,8 +30,8 @@ header h2 {
 
 #images {
     max-width: 1024px;
-    margin: 0 auto;
-    background: #fff
+    background: #fff;
+    margin: 5% auto;
 }
 
 #images img { max-width: 100% }
