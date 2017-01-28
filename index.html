@@ -22,6 +22,24 @@
     <script src="js/vk.js"></script>
     <script src="js/func.js"></script>
 
+    <style>
+        #nav li {
+            margin: 0.5vw;
+            padding: 1vw
+        }
+        #nav li div {
+            width: 7vw;
+            height: 7vw;
+        }
+
+        #nav li span {
+            font-size: 1.5vw
+        }
+
+        #images {
+            margin-bottom: 0.5vw
+        }
+    </style>
     <script>
         $(function () {
             window.$Nav = $("#nav")
@@ -36,6 +54,14 @@
     </script>
 </head>
 <body>
+<script>
+// Called directly with HTML
+$(function () {
+    $("#gdoc").colorbox({iframe:true, innerWidth:"85%", innerHeight:"90%"});
+
+})
+</script>
+<a id="gdoc" href="https://www.behance.net/vladaA/">Google doc presentation</a>
 <header>
     <h1>Olga Malaya</h1>
     <h2>- creative designer portfolio</h2>
