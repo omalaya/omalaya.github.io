@@ -25,11 +25,8 @@ String.prototype.getLineStartsWith = function (startStr) {
     return result
 }
 
-function appendHtml($selector, text) {
-    if ($selector.html() == '')
-        $selector.append(text)
-    else
-        $selector.children().last().after(text)
+function getUrlParameter(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 }
 
 function $tag(tag, id, css) {
@@ -57,27 +54,15 @@ function navItem_mouseleave() {
 }
 
 var album_click = function () {
-    var selectedAlbumId = $(this).attr("id").substr(2)
-    updateAlbumPhotoHeight(selectedAlbumId)
-    Vk.showAlbum(GroupId, selectedAlbumId, $Images);
+    var idAttr = $(this).attr("id");
+    var albumId = idAttr.substr(2)
+    showAlbum(albumId);
+    window.history.pushState(idAttr, Albums[idAttr].title, "?album=" + albumId);
 }
 
 ////////////////////////////////////////////////////
 // VK Helpers
 ////////////////////////////////////////////////////
-
-function clearId(possibleId) {
-    if (!possibleId) return 0;
-
-    // remove first '-' symbol
-    possibleId = (possibleId[0] == '-') ? possibleId.substr(1) : possibleId;
-    possibleId = possibleId.trim()
-
-    var isInt = possibleId === parseInt(possibleId, 10)
-    if (isInt) return possibleId;
-
-    return possibleId;
-}
 
 function getMaxPhotoSrc(photoObj) {
     if (photoObj.photo_2560) return photoObj.photo_2560
@@ -117,8 +102,81 @@ function getAlbumDescriptionArg(album, argName) {
     return argValue
 }
 
-function updateAlbumPhotoHeight(albumId) {
+function updateAlbumPhotosHeight(albumId) {
     var album = Albums['id' + albumId];
-    var height = getAlbumDescriptionArg(album, Arg.HEIGHT)
+    var height = album.options.height;
     GalleryConfig.rowHeight = (height) ? height : DefaultRowHeight
+}
+
+////////////////////////////////////////////////////
+// Content generators
+////////////////////////////////////////////////////
+
+function showAlbumsNav(albumArray) {
+    var $ul = $tag("ul")
+
+    albumArray.forEach(function (album) {
+        var color = getAlbumColor(album)
+
+        var $title = $tag("span").text(album.title),
+            $square = $tag("div", null, "background:" + color),
+            $navItem = $tag("li", "id" + album.id, "border-color:" + color)
+
+        $navItem.append($square, $title)
+
+        $ul.append($navItem)
+    })
+
+    $Nav.append($ul)
+}
+
+function showAlbum(albumId) {
+    if (albumId) Vk.loadAlbumPhotos(albumId, showAlbumPhotos);
+}
+
+function showAlbumPhotos(photos, album) {
+    updateAlbumPhotosHeight(album.id)
+
+    $Images.html('')
+
+    photos.forEach(function (photo) {
+        var photoSrc = getMaxPhotoSrc(photo)
+        var photoTitle = getPhotoTitle(photo)
+
+        var $link = $tag("a").attr({
+                title: photoTitle,
+                href: photoSrc
+            }),
+            $img = $tag("img").attr({
+                alt: photoTitle,
+                src: photoSrc
+            })
+
+        $link.append($img)
+
+        if (album.options.canHasOutLinks) {
+            var outLink = getOutLink(photo)
+            if (outLink) {
+                $link.addClass("out-link")
+                $link.attr("href", outLink)
+                $link.append($tag("div", null, "height: 100%").addClass("caption-mask"))
+            }
+        }
+
+        $Images.append($link)
+    })
+
+    $Images.justifiedGallery(GalleryConfig)
+        .on('jg.complete', function () {
+
+            var $links = $(this).find('a');
+
+            if (album.options.canHasOutLinks) {
+                $links.filter(".out-link").colorbox(ColorboxOutlinkConfig)
+                $links.not(".out-link").colorbox(ColorboxPhotosConfig)
+            }
+            else {
+                $links.colorbox(ColorboxPhotosConfig);
+            }
+        });
 }

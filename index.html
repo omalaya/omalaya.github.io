@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="lib/colorbox/colorbox.css"/>
 
 
-    <script src="js/jquery-3.1.1.js"></script>
+    <script src="lib/jquery-3.1.1.js"></script>
     <script src="lib/gallery/jquery.justifiedGallery.js"></script>
     <script src="lib/colorbox/jquery.colorbox-min.js"></script>
     <script src="lib/colorbox/jquery.colorbox-ru.js"></script>
@@ -26,8 +26,12 @@
         $(function () {
             window.$Nav = $("#nav")
             window.$Images = $("#images")
+            window.UrlAlbumId = getUrlParameter("album")
 
-            Vk.showAlbumsNav(GroupId, $Nav)
+            Vk.loadAlbums(function (albumsArray) {
+                showAlbumsNav(albumsArray)
+                showAlbum(UrlAlbumId)
+            })
 
             $Nav.on("mouseenter", "li", navItem_mouseenter)
             $Nav.on("mouseleave", "li", navItem_mouseleave)
