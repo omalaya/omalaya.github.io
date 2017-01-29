@@ -51,15 +51,14 @@ Vk.showAlbum = function (groupId, albumId, $album) {
         data.response.items.forEach(function (photo) {
             var photoSrc = maxPhotoSrc(photo)
 
-            $link = $tag("a").attr({
-                title: photo.text,
-                href: photoSrc
-            }).append(
-
-            $img = $tag("img").attr({
-                alt: photo.text,
-                src: photoSrc
-            }))
+            var $link = $tag("a").attr({
+                    title: photo.text,
+                    href: photoSrc
+                }),
+                $img = $tag("img").attr({
+                    alt: photo.text,
+                    src: photoSrc
+                })
 
             $link.append($img)
 
