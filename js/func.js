@@ -5,6 +5,26 @@
 // General Helpers
 ////////////////////////////////////////////////////
 
+String.prototype.startsWith = function (startStr) {
+    return startStr == this.substr(0, startStr.length);
+}
+
+String.prototype.strAfter = function (startStr) {
+    return this.substr(startStr.length).trim()
+}
+
+String.prototype.getLineStartsWith = function (startStr) {
+    var result = null
+    var lines = this.split("\n")
+    lines.some(function (line) {
+        if (line.startsWith(startStr)) {
+            result = line.trim()
+            return true
+        }
+    })
+    return result
+}
+
 function appendHtml($selector, text) {
     if ($selector.html() == '')
         $selector.append(text)
@@ -59,7 +79,7 @@ function clearId(possibleId) {
     return possibleId;
 }
 
-function maxPhotoSrc(photoObj) {
+function getMaxPhotoSrc(photoObj) {
     if (photoObj.photo_2560) return photoObj.photo_2560
     if (photoObj.photo_1280) return photoObj.photo_1280
     if (photoObj.photo_807) return photoObj.photo_807
@@ -69,25 +89,36 @@ function maxPhotoSrc(photoObj) {
     return null
 }
 
-function albumColor(album) {
+function getAlbumColor(album) {
     var descriptionArgs = album.description.split("\n")
     var bgColor = descriptionArgs[0]
 
     return (bgColor[0] == '#') ? bgColor : DefaultAlbumColor
 }
 
+function getPhotoTitle(photo) {
+    var title = photo.text.split("\n")[0];
+    var isUrl = title.startsWith("http");
+    return (isUrl) ? "" : title
+}
+
+function getOutLink(photo) {
+    return photo.text.getLineStartsWith("http")
+}
+
+function albumHasDescriptionArg(album, arg) {
+    var argValue = getAlbumDescriptionArg(album, arg);
+    return argValue !== null
+}
+
+function getAlbumDescriptionArg(album, argName) {
+    var argLine = album.description.getLineStartsWith(argName);
+    var argValue = (argLine === null) ? null : argLine.strAfter(argName);
+    return argValue
+}
+
 function updateAlbumPhotoHeight(albumId) {
     var album = Albums['id' + albumId];
-    var descriptionArgs = album.description.split("\n")
-
-    var heightArg = descriptionArgs[1] || '';
-    var isHeightSet = heightArg.indexOf("height") !== -1
-
-    if (isHeightSet) {
-        var heightVal = heightArg.split("height")[1];
-        GalleryConfig.rowHeight = parseInt(heightVal || DefaultRowHeight)
-    }
-    else {
-        GalleryConfig.rowHeight = DefaultRowHeight
-    }
+    var height = getAlbumDescriptionArg(album, Arg.HEIGHT)
+    GalleryConfig.rowHeight = (height) ? height : DefaultRowHeight
 }

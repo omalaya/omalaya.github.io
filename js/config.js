@@ -3,6 +3,11 @@ var GroupId = '-' + DefaultGroupId
 
 var DefaultAlbumColor = "#757575"
 
+var Arg = {
+    HEIGHT: "height",
+    HAS_LINKS: "has links"
+}
+
 var NavItem = {
     bgColor: "#fff",
     textColor: "#111",
@@ -15,15 +20,20 @@ var DefaultRowHeight = 150,
     GalleryConfig = {
         rowHeight: DefaultRowHeight,
         maxHeight: $(window).height(),
-        rel: 'gallery1',
+        rel: 'gallery',
         lastRow: 'nojustify',
         margins: 10
     }
 
-var ColorboxConfig = {
+var ColorboxPhotosConfig = {
     maxWidth: '95%',
     maxHeight: '90%',
     opacity: 0.9,
     transition: 'elastic',
+    current: ''
+}, ColorboxOutlinkConfig = {
+    iframe: true,
+    innerWidth: "80%",
+    innerHeight: "85%",
     current: ''
 }

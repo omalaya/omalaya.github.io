@@ -22,7 +22,7 @@ Vk.showAlbumsNav = function (groupId, $nav) {
 
         albums.forEach(function (album) {
             Albums['id' + album.id] = album
-            var color = albumColor(album)
+            var color = getAlbumColor(album)
 
             var $title = $tag("span").text(album.title),
                 $square = $tag("div", null, "background:" + color),
@@ -38,6 +38,9 @@ Vk.showAlbumsNav = function (groupId, $nav) {
 }
 
 Vk.showAlbum = function (groupId, albumId, $album) {
+    var album = Albums['id' + albumId]
+    var canHasOutLinks = albumHasDescriptionArg(album, Arg.HAS_LINKS)
+
     var method = "photos.get",
         args =
             "owner_id=" + groupId + "&" +
@@ -49,25 +52,44 @@ Vk.showAlbum = function (groupId, albumId, $album) {
         $album.html('')
 
         data.response.items.forEach(function (photo) {
-            var photoSrc = maxPhotoSrc(photo)
+            var photoSrc = getMaxPhotoSrc(photo)
+            var photoTitle = getPhotoTitle(photo)
 
             var $link = $tag("a").attr({
-                    title: photo.text,
+                    title: photoTitle,
                     href: photoSrc
                 }),
                 $img = $tag("img").attr({
-                    alt: photo.text,
+                    alt: photoTitle,
                     src: photoSrc
                 })
 
             $link.append($img)
+
+            if (canHasOutLinks) {
+                var outLink = getOutLink(photo)
+                if (outLink) {
+                    $link.addClass("out-link")
+                    $link.attr("href", outLink)
+                    $link.append($tag("div", null, "height: 100%").addClass("caption-mask"))
+                }
+            }
 
             $album.append($link)
         })
 
         $album.justifiedGallery(GalleryConfig)
             .on('jg.complete', function () {
-                $(this).find('a').colorbox(ColorboxConfig);
+
+                var $links = $(this).find('a');
+
+                if (canHasOutLinks) {
+                    $links.filter(".out-link").colorbox(ColorboxOutlinkConfig)
+                    $links.not(".out-link").colorbox(ColorboxPhotosConfig)
+                }
+                else {
+                    $links.colorbox(ColorboxPhotosConfig);
+                }
             });
     })
 }
