@@ -25,6 +25,11 @@ String.prototype.getLineStartsWith = function (startStr) {
     return result
 }
 
+function addToUrl(newParams, replaceFlag) {
+    var currentParams = (replaceFlag) ? "" : location.search
+    window.history.pushState({}, '', currentParams + newParams)
+}
+
 function getUrlParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
 }
@@ -54,10 +59,9 @@ function navItem_mouseleave() {
 }
 
 var album_click = function () {
-    var idAttr = $(this).attr("id");
-    var albumId = idAttr.substr(2)
+    var albumId = parseAlbumId($(this))
     showAlbum(albumId);
-    window.history.pushState(idAttr, Albums[idAttr].title, "?album=" + albumId);
+    addToUrl("?album=" + albumId, true);
 }
 
 ////////////////////////////////////////////////////
@@ -106,6 +110,10 @@ function updateAlbumPhotosHeight(albumId) {
     var album = Albums['id' + albumId];
     var height = album.options.height;
     GalleryConfig.rowHeight = (height) ? height : DefaultRowHeight
+}
+
+function parseAlbumId($selector) {
+    return $selector.attr("id").substr(2);
 }
 
 ////////////////////////////////////////////////////
