@@ -28,21 +28,15 @@
         $(function () {
             window.$Nav = $("#nav")
             window.$Images = $("#images")
-            window.UrlAlbumId = getUrlParameter("album")
+            window.SelectedAlbumId = getUrlParameter("album")
 
             Vk.loadAlbums(function (albumsArray) {
                 showAlbumsNav(albumsArray)
-                showAlbum(UrlAlbumId)
-
-
-                var $navTitles = $Nav.find("span");
-                var navPosition = $navTitles.offset().top;
-                $(window).scroll(function () {
-                    if ($(window).scrollTop() >= navPosition - 21)
-                        $Nav.addClass("stick")
-                    else
-                        $Nav.removeClass('stick')
-                })
+                if (SelectedAlbumId) {
+                    hoverMenuItem($selectedAlbumMenuItem())
+                    showAlbum(SelectedAlbumId)
+                }
+                stickMenu();
             })
 
             $Nav.on("mouseenter", "li", navItem_mouseenter)

@@ -46,22 +46,53 @@ function $tag(tag, id, css) {
 ////////////////////////////////////////////////////
 
 function navItem_mouseenter() {
-    var square = $(this).find("div")
-    var albumColor = square.css("background")
-
-    $(this).css("background", albumColor)
-    $(this).find("span").css("color", NavItem.hoverTextColor)
+    hoverMenuItem($(this));
 }
 
 function navItem_mouseleave() {
-    $(this).css("background", NavItem.bgColor)
-    $(this).find("span").css("color", NavItem.textColor)
+    unhoverMenuItem($(this));
 }
 
 var album_click = function () {
-    var albumId = parseAlbumId($(this))
-    showAlbum(albumId);
-    addToUrl("?album=" + albumId, true);
+
+    if (SelectedAlbumId)
+        unhoverMenuItem($selectedAlbumMenuItem(), true)
+    hoverMenuItem($(this))
+
+    SelectedAlbumId = parseAlbumId($(this))
+
+    showAlbum(SelectedAlbumId);
+    addToUrl("?album=" + SelectedAlbumId, true);
+}
+
+function hoverMenuItem($li) {
+    var square = $li.find("div")
+    var albumColor = square.css("background")
+
+    $li.css("background", albumColor)
+    $li.find("span").css("color", NavItem.hoverTextColor)
+}
+
+function unhoverMenuItem($li, force) {
+    if (force || SelectedAlbumId != parseAlbumId($li)) {
+        $li.css("background", NavItem.bgColor)
+        $li.find("span").css("color", NavItem.textColor)
+    }
+}
+
+function stickMenu() {
+    var $navTitles = $Nav.find("span");
+    var navPosition = $navTitles.offset().top;
+    $(window).scroll(function () {
+        if ($(window).scrollTop() >= navPosition - 21) {
+            $Nav.addClass("stick")
+            $Images.addClass("stick-top-fix")
+        }
+        else {
+            $Nav.removeClass('stick')
+            $Images.removeClass("stick-top-fix")
+        }
+    })
 }
 
 ////////////////////////////////////////////////////
@@ -119,6 +150,10 @@ function parseAlbumId($selector) {
 ////////////////////////////////////////////////////
 // Content generators
 ////////////////////////////////////////////////////
+
+function $selectedAlbumMenuItem() {
+    return $Nav.find("#id" + SelectedAlbumId);
+}
 
 function showAlbumsNav(albumArray) {
     var $ul = $tag("ul")

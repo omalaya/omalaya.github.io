@@ -35,6 +35,7 @@ header h2 {
     margin: 10px;
     padding: 10px;
     cursor: pointer;
+    border: 1px solid #fff !important;
     background: #fff;
 }
 
@@ -86,11 +87,13 @@ header h2 {
     height: 10px !important;
 }
 
+.stick-top-fix {
+    top: 171px
+}
 /* Images */
 
 #images {
     max-width: 1024px;
-    background: #fff;
     margin: 0 auto 10px;
 }
 
