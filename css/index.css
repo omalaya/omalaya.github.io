@@ -1,11 +1,9 @@
-
 /* General */
 
 body {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
 }
-
 
 /* Header */
 
@@ -27,15 +25,17 @@ header h2 {
 
 /* Navigation */
 
-#nav { text-align: center }
+#nav {
+    text-align: center;
+}
 
 #nav li {
     display: inline-block;
     text-align: center;
     margin: 10px;
     padding: 10px;
-    border: 1px solid #111;
     cursor: pointer;
+    background: #fff;
 }
 
 #nav li:hover {
@@ -60,6 +60,31 @@ header h2 {
     text-transform: lowercase;
 }
 
+.stick ul {
+    max-height: 60px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 0 2px rgba(0,0,0,.25);
+    text-align: center;
+    position: fixed;
+    z-index: 9999;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    top: 0;
+}
+
+.stick ul:hover {
+    max-height: none;
+}
+
+.stick ul li {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+.stick ul div {
+    height: 10px !important;
+}
 
 /* Images */
 
@@ -69,4 +94,6 @@ header h2 {
     margin: 0 auto 10px;
 }
 
-#images img { max-width: 100% }
+#images img {
+    max-width: 100%
+}

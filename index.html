@@ -33,6 +33,16 @@
             Vk.loadAlbums(function (albumsArray) {
                 showAlbumsNav(albumsArray)
                 showAlbum(UrlAlbumId)
+
+
+                var $navTitles = $Nav.find("span");
+                var navPosition = $navTitles.offset().top;
+                $(window).scroll(function () {
+                    if ($(window).scrollTop() >= navPosition - 21)
+                        $Nav.addClass("stick")
+                    else
+                        $Nav.removeClass('stick')
+                })
             })
 
             $Nav.on("mouseenter", "li", navItem_mouseenter)
