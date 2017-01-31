@@ -4,6 +4,14 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
 }
+/* Buttons */
+
+#buttons button {
+    padding: 10px;
+    margin: 10px;
+    background: lightgrey;
+    border: none;
+}
 
 /* Header */
 
