@@ -7,13 +7,20 @@ body {
 /* Buttons */
 
 #buttons button {
-    padding: 5px;
+    padding: 10px;
     margin-top: 20px;
     margin-left: 20px;
     background: #bdbbbb;
-    border: none;
     color: #ffffff;
-    font-size: 20px;
+    font: inherit;
+    font-size: 15px;
+    text-transform: lowercase;
+    border: 1px solid #bdbbbb;
+}
+
+#buttons button:hover {
+    background: #fff;
+    color: #111
 }
 
 /* Header */
