@@ -45,6 +45,10 @@ function $tag(tag, id, css) {
     return $(element);
 }
 
+function $parseId($selector) {
+    return $selector.attr("id").substr(2)
+}
+
 ////////////////////////////////////////////////////
 // Events
 ////////////////////////////////////////////////////
@@ -63,7 +67,7 @@ var album_click = function () {
         unhoverMenuItem($selectedAlbumMenuItem(), true)
     hoverMenuItem($(this))
 
-    SelectedAlbumId = parseAlbumId($(this))
+    SelectedAlbumId = $parseId($(this))
 
     showAlbum(SelectedAlbumId);
     addToUrl("?album=" + SelectedAlbumId, true);
@@ -78,7 +82,7 @@ function hoverMenuItem($li) {
 }
 
 function unhoverMenuItem($li, force) {
-    if (force || SelectedAlbumId != parseAlbumId($li)) {
+    if (force || SelectedAlbumId != $parseId($li)) {
         $li.css("background", NavItem.bgColor)
         $li.find("span").css("color", NavItem.textColor)
     }
@@ -155,10 +159,6 @@ function updateAlbumPhotosHeight(albumId) {
     var album = Albums['id' + albumId]
     var height = album.options.height
     GalleryConfig.rowHeight = (height) ? height : DefaultRowHeight
-}
-
-function parseAlbumId($selector) {
-    return $selector.attr("id").substr(2)
 }
 
 ////////////////////////////////////////////////////

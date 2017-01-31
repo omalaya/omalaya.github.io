@@ -16,6 +16,7 @@ var NavItem = {
 }
 
 var Albums = null
+var Pages = null
 
 var DefaultRowHeight = 150,
     GalleryConfig = {

@@ -34,7 +34,8 @@ Vk.loadAlbums = function (callback) {
             }
         })
 
-        callback(albumArray)
+        if (callback)
+            callback(albumArray)
     })
 }
 
@@ -49,7 +50,8 @@ Vk.loadAlbumPhotos = function (albumId, callback) {
         var photos = data.response.items,
             album = Albums['id' + albumId];
 
-        callback(photos, album)
+        if (callback)
+            callback(photos, album)
     })
 }
 
@@ -61,6 +63,39 @@ Vk.loadAlbumsThumbPhotos = function (callback) {
 
         var photos = data.response
 
-        callback(photos)
+        if (callback)
+            callback(photos)
+    })
+}
+
+Vk.loadPages = function (callback) {
+
+    var methodArgs = "owner_id=" + GroupId + "&count=100"
+
+    Vk.call("wall.get", methodArgs, function (data) {
+        if (!data.response) return
+
+        Pages = []
+
+        var wallPosts = data.response.items;
+
+        wallPosts.forEach(function (post, i) {
+            if (post.text.startsWith("page")) {
+                var firstBr = post.text.indexOf("\n")
+                firstBr = (firstBr < 0) ? post.text.length : firstBr
+
+                var pageTitle = post.text.substr(0, firstBr).strAfter("page")
+                var pageText = post.text.substr(firstBr)
+
+                Pages.push({
+                    id: i,
+                    title: pageTitle,
+                    text: pageText
+                })
+            }
+        })
+
+        if (callback)
+            callback()
     })
 }
