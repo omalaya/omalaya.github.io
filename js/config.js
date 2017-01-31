@@ -5,7 +5,8 @@ var DefaultAlbumColor = "#757575"
 
 var Arg = {
     HEIGHT: "height",
-    HAS_LINKS: "has links"
+    HAS_LINKS: "has links",
+    ORDER: "order"
 }
 
 var NavItem = {

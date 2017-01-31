@@ -5,6 +5,10 @@
 // General Helpers
 ////////////////////////////////////////////////////
 
+function log(obj) {
+    console.log(obj)
+}
+
 String.prototype.startsWith = function (startStr) {
     return startStr == this.substr(0, startStr.length);
 }
@@ -165,10 +169,20 @@ function $selectedAlbumMenuItem() {
     return $Nav.find("#id" + SelectedAlbumId)
 }
 
-function showAlbumsNav(albumArray) {
+function showAlbumsNav(albumsObj) {
     var $ul = $tag("ul")
 
-    albumArray.forEach(function (album) {
+    // Albums object to array
+    var albumsArray = $.map(albumsObj, function (album, index) {
+        return album;
+    })
+
+    // Sort by order
+    albumsArray.sort(function (a, b) {
+        return (a.options.order - b.options.order) || 0
+    })
+
+    albumsArray.forEach(function (album) {
         var color = getAlbumColor(album)
 
         var $title = $tag("span").text(album.title),

@@ -29,7 +29,8 @@ Vk.loadAlbums = function (callback) {
 
             Albums[key].options = {
                 height: getAlbumDescriptionArg(album, Arg.HEIGHT),
-                canHasOutLinks: albumHasDescriptionArg(album, Arg.HAS_LINKS)
+                canHasOutLinks: albumHasDescriptionArg(album, Arg.HAS_LINKS),
+                order: getAlbumDescriptionArg(album, Arg.ORDER) || albumArray.length
             }
         })
 

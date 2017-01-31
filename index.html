@@ -30,8 +30,8 @@
             window.$Images = $("#images")
             window.SelectedAlbumId = getUrlParameter("album")
 
-            Vk.loadAlbums(function (albumsArray) {
-                showAlbumsNav(albumsArray)
+            Vk.loadAlbums(function (albums) {
+                showAlbumsNav(albums)
 
                 if (SelectedAlbumId) {
                     hoverMenuItem($selectedAlbumMenuItem())
