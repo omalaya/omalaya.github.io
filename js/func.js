@@ -109,6 +109,16 @@ function getMaxPhotoSrc(photoObj) {
     return null
 }
 
+function getPhotoSrc(photoObj, size) {
+    if (size > 1280 && photoObj.photo_2560) return photoObj.photo_2560
+    if (size > 807 && size <= 1280 && photoObj.photo_1280) return photoObj.photo_1280
+    if (size > 604 && size <= 807 && photoObj.photo_807) return photoObj.photo_807
+    if (size > 130 && size <= 604 && photoObj.photo_604) return photoObj.photo_604
+    if (size > 75 && size <= 130 && photoObj.photo_130) return photoObj.photo_130
+    if (size <= 75 && photoObj.photo_75) return photoObj.photo_75
+    return null
+}
+
 function getAlbumColor(album) {
     var descriptionArgs = album.description.split("\n")
     var bgColor = descriptionArgs[0]
@@ -117,8 +127,8 @@ function getAlbumColor(album) {
 }
 
 function getPhotoTitle(photo) {
-    var title = photo.text.split("\n")[0];
-    var isUrl = title.startsWith("http");
+    var title = photo.text.split("\n")[0]
+    var isUrl = title.startsWith("http")
     return (isUrl) ? "" : title
 }
 
@@ -127,24 +137,24 @@ function getOutLink(photo) {
 }
 
 function albumHasDescriptionArg(album, arg) {
-    var argValue = getAlbumDescriptionArg(album, arg);
+    var argValue = getAlbumDescriptionArg(album, arg)
     return argValue !== null
 }
 
 function getAlbumDescriptionArg(album, argName) {
-    var argLine = album.description.getLineStartsWith(argName);
-    var argValue = (argLine === null) ? null : argLine.strAfter(argName);
+    var argLine = album.description.getLineStartsWith(argName)
+    var argValue = (argLine === null) ? null : argLine.strAfter(argName)
     return argValue
 }
 
 function updateAlbumPhotosHeight(albumId) {
-    var album = Albums['id' + albumId];
-    var height = album.options.height;
+    var album = Albums['id' + albumId]
+    var height = album.options.height
     GalleryConfig.rowHeight = (height) ? height : DefaultRowHeight
 }
 
 function parseAlbumId($selector) {
-    return $selector.attr("id").substr(2);
+    return $selector.attr("id").substr(2)
 }
 
 ////////////////////////////////////////////////////
@@ -152,7 +162,7 @@ function parseAlbumId($selector) {
 ////////////////////////////////////////////////////
 
 function $selectedAlbumMenuItem() {
-    return $Nav.find("#id" + SelectedAlbumId);
+    return $Nav.find("#id" + SelectedAlbumId)
 }
 
 function showAlbumsNav(albumArray) {
@@ -222,4 +232,23 @@ function showAlbumPhotos(photos, album) {
                 $links.colorbox(ColorboxPhotosConfig);
             }
         });
+}
+
+function showSlider() {
+    Vk.loadAlbumsThumbPhotos(function (photos) {
+        var $slider = $tag("div")
+        var $ul = $tag("ul").addClass("bxslider")
+
+        photos.forEach(function (photo) {
+            $ul.append(
+                $tag("li").append(
+                    $tag("img").attr("src", getPhotoSrc(photo, 500))
+                )
+            )
+        })
+
+        $Images.append(
+            $slider.append($ul)
+        )
+    })
 }

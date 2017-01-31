@@ -17,12 +17,15 @@ Vk.loadAlbums = function (callback) {
         if (!data.response) return
         var albumArray = data.response.items;
 
-        Albums = (!Albums) ? {} : Albums
+        Albums = {}
+        Albums.thumbArray = []
 
         albumArray.forEach(function (album) {
             var key = 'id' + album.id;
 
             Albums[key] = album
+
+            Albums.thumbArray.push(GroupId + "_" + album.thumb_id)
 
             Albums[key].options = {
                 height: getAlbumDescriptionArg(album, Arg.HEIGHT),
@@ -46,5 +49,17 @@ Vk.loadAlbumPhotos = function (albumId, callback) {
             album = Albums['id' + albumId];
 
         callback(photos, album)
+    })
+}
+
+Vk.loadAlbumsThumbPhotos = function (callback) {
+    var methodArgs = "photos=" + Albums.thumbArray.toString()
+
+    Vk.call("photos.getById", methodArgs, function (data) {
+        if (!data.response) return
+
+        var photos = data.response
+
+        callback(photos)
     })
 }
