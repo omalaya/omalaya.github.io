@@ -49,6 +49,21 @@ function $parseId($selector) {
     return $selector.attr("id").substr(2)
 }
 
+function convertMd(mdText, callback) {
+    $.ajax({
+        type: "POST",
+        dataType: "html",
+        processData: false,
+        url: "https://api.github.com/markdown/raw",
+        data: mdText,
+        contentType: "text/plain",
+        success: callback,
+        error: function(jqXHR, textStatus, error){
+            console.warn(jqXHR, textStatus, error);
+        }
+    });
+}
+
 ////////////////////////////////////////////////////
 // Events
 ////////////////////////////////////////////////////
@@ -73,6 +88,20 @@ var album_click = function () {
     addToUrl("?album=" + SelectedAlbumId, true);
 }
 
+function pageButton_click() {
+    var pageIndex = $parseId($(this))
+    var page = Pages[pageIndex];
+
+    convertMd(page.text, function (html) {
+        $PageText.html(html)
+        $PageWrap.addClass("open")
+    })
+}
+
+function pageClose_click() {
+    $PageWrap.removeClass("open")
+}
+
 function hoverMenuItem($li) {
     var square = $li.find("div")
     var albumColor = square.css("background")
@@ -88,11 +117,11 @@ function unhoverMenuItem($li, force) {
     }
 }
 
-function stickMenu() {
-    var $navTitles = $Nav.find("span");
-    var navPosition = $navTitles.offset().top;
-    $(window).scroll(function () {
-        if ($(window).scrollTop() >= navPosition - 21) {
+function stickAlbumsNav() {
+    var $w = $(window)
+    initStartStickAlbumsNavPosition();
+    $w.scroll(function () {
+        if ($w.scrollTop() >= StartStickAlbumsNavPosition) {
             $Nav.addClass("stick")
             $Images.addClass("stick-top-fix")
         }
@@ -101,6 +130,15 @@ function stickMenu() {
             $Images.removeClass("stick-top-fix")
         }
     })
+}
+
+function initStartStickAlbumsNavPosition() {
+    var $navTitles = $Nav.find("span")
+    window.StartStickAlbumsNavPosition = $navTitles.offset().top - 21
+}
+
+function fixDesignAfterAsynk() {
+    initStartStickAlbumsNavPosition()
 }
 
 ////////////////////////////////////////////////////
@@ -169,13 +207,8 @@ function $selectedAlbumMenuItem() {
     return $Nav.find("#id" + SelectedAlbumId)
 }
 
-function showAlbumsNav(albumsObj) {
+function showAlbumsNav(albumsArray) {
     var $ul = $tag("ul")
-
-    // Albums object to array
-    var albumsArray = $.map(albumsObj, function (album, index) {
-        return album;
-    })
 
     // Sort by order
     albumsArray.sort(function (a, b) {
@@ -195,6 +228,10 @@ function showAlbumsNav(albumsObj) {
     })
 
     $Nav.append($ul)
+
+    $Nav.on("mouseenter", "li", navItem_mouseenter)
+    $Nav.on("mouseleave", "li", navItem_mouseleave)
+    $Nav.on("click", "li", album_click)
 }
 
 function showAlbum(albumId) {
@@ -265,4 +302,16 @@ function showSlider() {
             $slider.append($ul)
         )
     })
+}
+
+function showPagesNav() {
+    Pages.forEach(function (page) {
+        $PagesNav.append(
+            $tag("button")
+                .text(page.title)
+                .attr("id", "id" + page.id)
+        )
+    })
+
+    $PagesNav.on("click", "button", pageButton_click)
 }

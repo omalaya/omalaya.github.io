@@ -30,7 +30,10 @@
             window.$Nav = $("#nav")
             window.$Images = $("#images")
             window.$Pages = $("#pages")
-            window.$PagesNav = $("#pages nav")
+            window.$PagesNav = $Pages.find("nav")
+            window.$PageWrap = $Pages.find(".page-text-wrap")
+            window.$PageClose = $PageWrap.find(".page-text-wrap-close")
+            window.$PageText = $PageWrap.find(".page-text")
 
             window.SelectedAlbumId = getUrlParameter("album")
 
@@ -42,52 +45,15 @@
                     showAlbum(SelectedAlbumId)
                 }
 
-                stickMenu();
+                stickAlbumsNav()
+                fixDesignAfterAsynk()
             })
 
-            $Nav.on("mouseenter", "li", navItem_mouseenter)
-            $Nav.on("mouseleave", "li", navItem_mouseleave)
-            $Nav.on("click", "li", album_click)
-
-            $("#pages").on("click", "button", function () {
-                $(".page-text-wrap").addClass("open")
-            })
-
-            $("#pages .page-text-wrap-close").click(function () {
-                $(".page-text-wrap").removeClass("open")
-            })
-
+            $PageClose.click(pageClose_click)
 
             Vk.loadPages(function () {
-                Pages.forEach(function (page) {
-                    $PagesNav.append(
-                        $tag("button")
-                            .text(page.title)
-                            .attr("id","id"+page.id)
-                    )
-                })
-
-                $PagesNav.on("click", "button", function () {
-                    var pageIndex = $parseId($(this))
-                    var page = Pages[pageIndex];
-
-                    $.ajax({
-                        type: "POST",
-                        dataType: "html",
-                        processData: false,
-                        url: "https://api.github.com/markdown/raw",
-                        data: page.text,
-                        contentType: "text/plain",
-                        success: function(data){
-                            $Pages.find(".page-text").html(data)
-                            $Pages.find(".page-wrap").addClass("open")
-                        },
-                        error: function(jqXHR, textStatus, error){
-                            console.log(jqXHR, textStatus, error);
-                        }
-                    });
-                })
-
+                showPagesNav()
+                fixDesignAfterAsynk()
             })
         })
     </script>
@@ -97,53 +63,7 @@
     <nav></nav>
     <div class="page-text-wrap">
         <span class="page-text-wrap-close"></span>
-        <div class="page-text">
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi scelerisque est purus, ac placerat tortor
-                dictum vel. Aenean ornare tincidunt lacus, a vestibulum quam convallis non. Nam ullamcorper commodo
-                mauris, quis feugiat felis commodo eu. Vestibulum commodo imperdiet ultrices. Aenean posuere pharetra
-                convallis. Ut dapibus libero eu sapien hendrerit, sed lobortis massa consectetur. In interdum, nisl
-                viverra tristique bibendum, lectus dui accumsan purus, vel congue tortor ligula et diam. Fusce laoreet
-                tortor purus, eget volutpat urna imperdiet vel. Suspendisse turpis purus, ullamcorper ut consectetur a,
-                pretium id elit. Pellentesque eget metus eget neque pharetra aliquam viverra ac tellus. Nullam eget
-                porta risus. Praesent cursus consequat ante, et dictum libero ultricies sed. Donec ac aliquam est.
-                Pellentesque est massa, commodo a dictum non, auctor eu libero.
-            </p>
-            <p>
-                In commodo dolor sit amet tempus tincidunt. Duis nec vulputate metus. Etiam ac eros feugiat, viverra
-                nibh ut, facilisis sapien. Aliquam consequat odio in sapien porta, a accumsan nunc finibus. Maecenas
-                convallis justo eu nunc vehicula pharetra sed eget sapien. Sed laoreet rutrum leo. Pellentesque
-                hendrerit ante lobortis ipsum ultrices volutpat.
-            </p>
-            <p>
-                Fusce varius tortor quis arcu rutrum, ut imperdiet magna vestibulum. Sed accumsan, velit quis vestibulum
-                maximus, sapien nisl gravida sem, at faucibus sapien ligula quis turpis. Maecenas ac vehicula risus.
-                Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce luctus scelerisque erat. Nulla
-                auctor, dolor at vulputate blandit, est ligula accumsan urna, laoreet iaculis nisl velit ac est. Cras
-                elementum, metus eu auctor consectetur, dui tellus auctor lectus, sed aliquet nibh ex at orci. Integer
-                malesuada tellus a massa faucibus dictum. Quisque semper sapien ut sapien tempor scelerisque. Fusce erat
-                tellus, dictum sit amet nibh eu, finibus porta nunc.
-            </p>
-            <p>
-                Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla quis
-                ipsum sit amet ligula maximus ullamcorper. Suspendisse potenti. Integer finibus nisi vitae dolor
-                commodo, lacinia consequat magna ullamcorper. Suspendisse at ex ut lorem tristique commodo. Nam lacus
-                velit, tempor interdum suscipit in, dapibus eget ipsum. Proin quam est, aliquet et erat et, ultrices
-                suscipit odio. Nulla facilisi. Sed euismod metus vitae imperdiet vehicula. Maecenas cursus sollicitudin
-                nulla non gravida. Vivamus vel nisl neque. Class aptent taciti sociosqu ad litora torquent per conubia
-                nostra, per inceptos himenaeos. Aenean facilisis leo ullamcorper mattis malesuada. Etiam sit amet
-                feugiat velit. Proin ut metus nec justo viverra feugiat euismod id sem. Praesent metus libero, vehicula
-                ac vulputate a, iaculis sit amet purus.
-            </p>
-            <p>
-                Maecenas porta erat erat. Maecenas orci diam, tempus a tristique in, convallis sit amet quam. Nunc
-                imperdiet dictum justo ut efficitur. Proin rhoncus condimentum malesuada. Ut aliquam tortor felis. Donec
-                dolor turpis, fringilla id volutpat sit amet, congue non libero. Donec ultricies tempor porta.
-                Suspendisse dictum massa id nulla imperdiet, ut faucibus mauris ornare. Quisque vitae ultrices leo.
-                Proin condimentum ultrices facilisis. Integer nibh sem, consequat id nibh vitae, sagittis tristique
-                erat.
-            </p>
-        </div>
+        <div class="page-text"></div>
     </div>
 </section>
 <header>
