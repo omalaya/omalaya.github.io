@@ -58,10 +58,25 @@ function convertMd(mdText, callback) {
         data: mdText,
         contentType: "text/plain",
         success: callback,
-        error: function(jqXHR, textStatus, error){
+        error: function (jqXHR, textStatus, error) {
             console.warn(jqXHR, textStatus, error);
         }
     });
+}
+
+function fixStartSpaces(str) {
+    var dotCount = 0
+    while (dotCount < str.length && str[dotCount] == '.')
+        dotCount++
+    return new Array(dotCount + 1).join(" ") + str.substr(dotCount, str.length)
+}
+
+function fixStartSpacesInText(text) {
+    var lines = text.split("\n");
+    for (var i = 0; i < lines.length; i++) {
+        lines[i] = fixStartSpaces(lines[i])
+    }
+    return lines.join("\n")
 }
 
 ////////////////////////////////////////////////////
@@ -92,7 +107,10 @@ function pageButton_click() {
     var pageIndex = $parseId($(this))
     var page = Pages[pageIndex];
 
-    convertMd(page.text, function (html) {
+    var text = fixStartSpacesInText(page.text);
+
+    console.log({text: text})
+    convertMd(text, function (html) {
         $PageText.html(html)
         $PageWrap.addClass("open")
     })
@@ -133,8 +151,9 @@ function stickAlbumsNav() {
 }
 
 function initStartStickAlbumsNavPosition() {
-    var $navTitles = $Nav.find("span")
-    window.StartStickAlbumsNavPosition = $navTitles.offset().top - 21
+    var offset = $Nav.find("span").offset()
+    if (offset)
+        StartStickAlbumsNavPosition = offset.top - 21
 }
 
 function fixDesignAfterAsynk() {
