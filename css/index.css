@@ -5,6 +5,11 @@ body {
     font-size: 16px;
 }
 
+#nav ul,
+#images ul {
+    list-style: none;
+}
+
 #nav li:hover,
 #pages nav button:hover {
     -webkit-transition: all 0.2s ease;
