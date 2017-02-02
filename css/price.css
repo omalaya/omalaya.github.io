@@ -3,6 +3,19 @@
     margin: 0 auto;
     text-align: center;
 }
+
+#price h1, #price h2, #price h3, #price h4, #price h5, #price h6 {
+    padding-bottom: 0.3em;
+    font-weight: bold;
+}
+
+#price h1 { font-size: 2em; }
+#price h2 { font-size: 1.5em; }
+#price p {
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
 #price ul,
 #price ol,
 #price li {
@@ -28,7 +41,6 @@
     content: ' ';
     margin-bottom: 5px;
 }
-
 #price ul li ul {
     text-transform: none;
     font-weight: normal;
