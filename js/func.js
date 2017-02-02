@@ -2,52 +2,38 @@
  * Created by Alex on 27.01.2017.
  */
 ////////////////////////////////////////////////////
-// General Helpers
+// Actions
 ////////////////////////////////////////////////////
 
-function log(obj) {
-    console.log(obj)
-}
+function stickAlbumsNav() {
+    var $w = $(window)
+    initStartStickAlbumsNavPosition()
 
-String.prototype.startsWith = function (startStr) {
-    return startStr == this.substr(0, startStr.length);
-}
-
-String.prototype.strAfter = function (startStr) {
-    return this.substr(startStr.length).trim()
-}
-
-String.prototype.getLineStartsWith = function (startStr) {
-    var result = null
-    var lines = this.split("\n")
-    lines.some(function (line) {
-        if (line.startsWith(startStr)) {
-            result = line.trim()
-            return true
+    $w.scroll(function () {
+        if ($w.scrollTop() >= StartStickAlbumsNavPosition) {
+            $Nav.addClass("stick")
+            $Images.addClass("stick-top-fix")
+        }
+        else {
+            $Nav.removeClass('stick')
+            $Images.removeClass("stick-top-fix")
         }
     })
-    return result
 }
 
-function addToUrl(newParams, replaceFlag) {
-    var currentParams = (replaceFlag) ? "" : location.search
-    window.history.pushState({}, '', currentParams + newParams)
+function initStartStickAlbumsNavPosition() {
+    var offset = $Nav.find("span").offset()
+    if (offset)
+        StartStickAlbumsNavPosition = offset.top - 21
 }
 
-function getUrlParameter(name) {
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+function fixDesignAfterAsynk() {
+    initStartStickAlbumsNavPosition()
 }
 
-function $tag(tag, id, css) {
-    var element = document.createElement(tag);
-    if (id) element.id = id;
-    if (css) element.style.cssText = css;
-    return $(element);
-}
-
-function $parseId($selector) {
-    return $selector.attr("id").substr(2)
-}
+////////////////////////////////////////////////////
+// Markdown
+////////////////////////////////////////////////////
 
 function convertMd(mdText, callback) {
     $.ajax({
@@ -71,31 +57,15 @@ function fixStartSpaces(str) {
     return new Array(dotCount + 1).join(" ") + str.substr(dotCount, str.length)
 }
 
-function fixStartSpacesInText(text) {
-    var lines = text.split("\n");
-    for (var i = 0; i < lines.length; i++) {
-        lines[i] = fixStartSpaces(lines[i])
-    }
-    return lines.join("\n")
-}
-
 ////////////////////////////////////////////////////
-// Events
+// Event handlers
 ////////////////////////////////////////////////////
-
-function navItem_mouseenter() {
-    hoverMenuItem($(this));
-}
-
-function navItem_mouseleave() {
-    unhoverMenuItem($(this));
-}
 
 var album_click = function () {
 
     if (SelectedAlbumId)
-        unhoverMenuItem($selectedAlbumMenuItem(), true)
-    hoverMenuItem($(this))
+        $selectedAlbumMenuItem().removeClass("hover")
+    $(this).addClass("hover")
 
     SelectedAlbumId = $parseId($(this))
 
@@ -104,60 +74,37 @@ var album_click = function () {
 }
 
 function pageButton_click() {
-    var pageIndex = $parseId($(this))
-    var page = Pages[pageIndex];
+    var pageId = $parseId($(this))
+    var page = Pages[pageId];
 
-    var text = fixStartSpacesInText(page.text);
+    analyzePage(pageId);
 
-    console.log({text: text})
-    convertMd(text, function (html) {
-        $PageText.html(html)
+    convertMd(page.text, function (html) {
+        $PageText.html("")
+
+        if (page.options.styleUrl) {
+            loadCss(page.options.styleUrl)
+        }
+
+        if (page.options.typography == 'false')
+            $PageText.removeClass("typography")
+        else
+            $PageText.addClass("typography")
+
+        if (page.options.id) {
+            $PageText.append(
+                $tag("div", page.options.id).append(html)
+            )
+        } else {
+            $PageText.html(html)
+        }
+
         $PageWrap.addClass("open")
     })
 }
 
 function pageClose_click() {
     $PageWrap.removeClass("open")
-}
-
-function hoverMenuItem($li) {
-    var square = $li.find("div")
-    var albumColor = square.css("background")
-
-    $li.css("background", albumColor)
-    $li.find("span").css("color", NavItem.hoverTextColor)
-}
-
-function unhoverMenuItem($li, force) {
-    if (force || SelectedAlbumId != $parseId($li)) {
-        $li.css("background", NavItem.bgColor)
-        $li.find("span").css("color", NavItem.textColor)
-    }
-}
-
-function stickAlbumsNav() {
-    var $w = $(window)
-    initStartStickAlbumsNavPosition();
-    $w.scroll(function () {
-        if ($w.scrollTop() >= StartStickAlbumsNavPosition) {
-            $Nav.addClass("stick")
-            $Images.addClass("stick-top-fix")
-        }
-        else {
-            $Nav.removeClass('stick')
-            $Images.removeClass("stick-top-fix")
-        }
-    })
-}
-
-function initStartStickAlbumsNavPosition() {
-    var offset = $Nav.find("span").offset()
-    if (offset)
-        StartStickAlbumsNavPosition = offset.top - 21
-}
-
-function fixDesignAfterAsynk() {
-    initStartStickAlbumsNavPosition()
 }
 
 ////////////////////////////////////////////////////
@@ -197,13 +144,8 @@ function getPhotoTitle(photo) {
     return (isUrl) ? "" : title
 }
 
-function getOutLink(photo) {
+function getPhotoTextOutLink(photo) {
     return photo.text.getLineStartsWith("http")
-}
-
-function albumHasDescriptionArg(album, arg) {
-    var argValue = getAlbumDescriptionArg(album, arg)
-    return argValue !== null
 }
 
 function getAlbumDescriptionArg(album, argName) {
@@ -212,14 +154,70 @@ function getAlbumDescriptionArg(album, argName) {
     return argValue
 }
 
+function albumHasDescriptionArg(album, arg) {
+    var argValue = getAlbumDescriptionArg(album, arg)
+    return argValue !== null
+}
+
 function updateAlbumPhotosHeight(albumId) {
     var album = Albums['id' + albumId]
     var height = album.options.height
     GalleryConfig.rowHeight = (height) ? height : DefaultRowHeight
 }
 
+function analyzePage(pageId) {
+    var page = Pages[pageId]
+
+    if (page.isAnalyzed)
+        return
+
+    var lines = page.text.split("\n")
+
+    page.options = {}
+    var lastOptionLineIndex = -1
+    var tryToSearchOptions = true
+
+    // Parse page Params
+    for (var i = 0; i < lines.length; i++) {
+        var line = lines[i]
+        if (tryToSearchOptions) {
+            if (line.startsWith(PageArg.ID)) {
+                page.options.id = line.strAfter(PageArg.ID)
+                lastOptionLineIndex = i
+                continue
+            }
+            if (line.startsWith(PageArg.STYLE_URL)) {
+                page.options.styleUrl = line.strAfter(PageArg.STYLE_URL)
+                lastOptionLineIndex = i
+                continue
+            }
+            if (line.startsWith(PageArg.TYPOGRAPHY)) {
+                page.options.typography = line.strAfter(PageArg.TYPOGRAPHY)
+                lastOptionLineIndex = i
+                continue
+            }
+            if (line.startsWith("text")) {
+                lastOptionLineIndex = i
+                tryToSearchOptions = false
+                continue
+            }
+        } else {
+            // Fix spaces
+            lines[i] = fixStartSpaces(line)
+        }
+    }
+
+    // Save page text
+    if (lastOptionLineIndex > 0 && (lastOptionLineIndex + 1) < lines.length)
+        page.text = lines.slice(lastOptionLineIndex + 1).join("\n")
+    else
+        page.text = lines.join("\n")
+
+    page.isAnalyzed = true
+}
+
 ////////////////////////////////////////////////////
-// Content generators
+// Content
 ////////////////////////////////////////////////////
 
 function $selectedAlbumMenuItem() {
@@ -239,17 +237,19 @@ function showAlbumsNav(albumsArray) {
 
         var $title = $tag("span").text(album.title),
             $square = $tag("div", null, "background:" + color),
-            $navItem = $tag("li", "id" + album.id, "border-color:" + color)
+            $navItem = $tag("li", "id" + album.id,
+                "border-color:" + color + ";background:" + color)
 
-        $navItem.append($square, $title)
-
-        $ul.append($navItem)
+        $ul.append(
+            $navItem.append(
+                $tag("div").append($square, $title)
+            ))
     })
 
     $Nav.append($ul)
 
-    $Nav.on("mouseenter", "li", navItem_mouseenter)
-    $Nav.on("mouseleave", "li", navItem_mouseleave)
+    // $Nav.on("mouseenter", "li", navItem_mouseenter)
+    // $Nav.on("mouseleave", "li", navItem_mouseleave)
     $Nav.on("click", "li", album_click)
 }
 
@@ -278,7 +278,7 @@ function showAlbumPhotos(photos, album) {
         $link.append($img)
 
         if (album.options.canHasOutLinks) {
-            var outLink = getOutLink(photo)
+            var outLink = getPhotoTextOutLink(photo)
             if (outLink) {
                 $link.addClass("out-link")
                 $link.attr("href", outLink)

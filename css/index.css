@@ -10,7 +10,7 @@ body {
     list-style: none;
 }
 
-#nav li:hover,
+#nav li:hover > div,
 #pages nav button:hover {
     -webkit-transition: all 0.2s ease;
     -moz-transition: all 0.2s ease;
@@ -169,13 +169,24 @@ header h2 {
     display: inline-block;
     text-align: center;
     margin: 10px;
-    padding: 10px;
     cursor: pointer;
     border: 1px solid #fff !important;
     background: #fff;
 }
 
-#nav li div {
+#nav li > div {
+    padding: 10px;
+    background: #fff;
+    color: #111
+}
+
+#nav li:hover > div,
+#nav li.hover > div {
+    background: inherit;
+    color: #fff
+}
+
+#nav li > div > div {
     display: inline-block;
     width: 100px;
     height: 100px;
@@ -184,7 +195,6 @@ header h2 {
 
 #nav li span {
     display: block;
-    color: #111;
     font-size: 20px;
     text-transform: lowercase;
 }
@@ -209,9 +219,13 @@ header h2 {
 
 .stick ul li {
     margin-top: 0 !important;
+}
+
+.stick ul li > div {
     padding-top: 0 !important;
 }
-.stick ul div {
+
+.stick ul li > div > div {
     height: 10px !important;
 }
 

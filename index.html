@@ -22,6 +22,7 @@
     <script src="lib/colorbox/jquery.colorbox-ru.js"></script>
 
     <script src="js/config.js"></script>
+    <script src="js/helpers.js"></script>
     <script src="js/vk.js"></script>
     <script src="js/func.js"></script>
 
@@ -29,6 +30,7 @@
         $(function () {
             window.$Nav = $("#nav")
             window.$Images = $("#images")
+
             window.$Pages = $("#pages")
             window.$PagesNav = $Pages.find("nav")
             window.$PageWrap = $Pages.find(".page-text-wrap")
@@ -41,7 +43,7 @@
                 showAlbumsNav(albums)
 
                 if (SelectedAlbumId) {
-                    hoverMenuItem($selectedAlbumMenuItem())
+                    $selectedAlbumMenuItem().addClass("hover")
                     showAlbum(SelectedAlbumId)
                 }
 
@@ -63,7 +65,27 @@
     <nav></nav>
     <div class="page-text-wrap">
         <span class="page-text-wrap-close"></span>
-        <div class="page-text"></div>
+        <div class="page-text typography">
+            <ul id="price">
+                <li>Буклет
+                <ul>
+                    <li>Обкладинка 200 грн</li>
+                    <li>1 стор від 50 грн</li>
+                </ul></li>
+                <li>Біг борд
+                <ul>
+                    <li>Від 300 грн</li>
+                </ul></li>
+                <li>Сіті лайт
+                <ul>
+                    <li>Від 200 грн</li>
+                </ul></li>
+                <li>Візитка
+                <ul>
+                    <li>Від 200 грн</li>
+                </ul></li>
+            </ul>
+        </div>
     </div>
 </section>
 <header>

@@ -3,10 +3,16 @@ var GroupId = '-' + DefaultGroupId
 
 var DefaultAlbumColor = "#757575"
 
-var Arg = {
+var AlbumArg = {
     HEIGHT: "height",
     HAS_LINKS: "has links",
     ORDER: "order"
+}
+
+var PageArg = {
+    ID: "id",
+    STYLE_URL : "style url",
+    TYPOGRAPHY: "typography"
 }
 
 var NavItem = {

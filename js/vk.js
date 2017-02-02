@@ -28,9 +28,9 @@ Vk.loadAlbums = function (callback) {
             Albums.thumbArray.push(GroupId + "_" + album.thumb_id)
 
             Albums[key].options = {
-                height: getAlbumDescriptionArg(album, Arg.HEIGHT),
-                canHasOutLinks: albumHasDescriptionArg(album, Arg.HAS_LINKS),
-                order: getAlbumDescriptionArg(album, Arg.ORDER) || albumArray.length
+                height: getAlbumDescriptionArg(album, AlbumArg.HEIGHT),
+                canHasOutLinks: albumHasDescriptionArg(album, AlbumArg.HAS_LINKS),
+                order: getAlbumDescriptionArg(album, AlbumArg.ORDER) || albumArray.length
             }
         })
 
@@ -90,7 +90,8 @@ Vk.loadPages = function (callback) {
                 Pages.push({
                     id: i,
                     title: pageTitle,
-                    text: pageText
+                    text: pageText,
+                    isAnalyzed: false
                 })
             }
         })
