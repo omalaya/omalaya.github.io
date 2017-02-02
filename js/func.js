@@ -201,10 +201,9 @@ function analyzePage(pageId) {
                 tryToSearchOptions = false
                 continue
             }
-        } else {
-            // Fix spaces
-            lines[i] = fixStartSpaces(line)
         }
+        // Fix spaces
+        lines[i] = fixStartSpaces(line)
     }
 
     // Save page text
