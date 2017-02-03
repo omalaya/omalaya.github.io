@@ -205,8 +205,7 @@ function findVariables(lines, startFrom) {
     var vars = {}
     for (var i = startFrom; i < lines.length; i++) {
         var line = lines[i]
-        if (line.startsWith(PageArg.VAR_START) &&
-            !line.startsWith(PageArg.VAR_END)) {
+        if (line.startsWith(PageArg.VAR_START) && !line.startsWith(PageArg.VAR_END)) {
             vars[line.strAfter(PageArg.VAR_START).trim()] = {startPos: i}
             continue
         }
@@ -329,42 +328,47 @@ function showPagesNav() {
 }
 
 function showPage(page) {
-    convertMd(page.text, function (mdHtml) {
-        $PageText.html("")
 
-        if (page.options.cssUrl) {
-            loadCss(page.options.cssUrl)
-        }
+    if (page.options.htmlUrl) {
 
-        if (page.options.typography == 'false')
-            $PageText.removeClass("typography")
-        else
-            $PageText.addClass("typography")
+        page.options.vars = findVariables(page.text.split("\n"), 0)
 
-        page.options.vars = findVariables(mdHtml.split("\n"), 0)
+        $.get(page.options.htmlUrl, function (htmlTmpl) {
 
-        if (page.options.id) {
-            mdHtml = "<div id='" + page.options.id + "'>" + mdHtml + "</div>"
-        }
+            $PageText.append(htmlTmpl)
 
-        if (page.options.htmlUrl) {
-            $.get(page.options.htmlUrl, function (htmlTmpl) {
-                $PageText.append(htmlTmpl)
+            var vars = page.options.vars;
+            for (var varName in vars) {
+                if (vars.hasOwnProperty(varName)) {
 
-                var vars = page.options.vars;
-                for (var varName in vars) {
-                    if (vars.hasOwnProperty(varName)) {
-                        var $s = $PageText.find("#"+ varName)
-                        if ($s.length)
-                            $s.html(vars[varName].text)
-                    }
+                    var $s = $PageText.find("#" + varName)
+
+                    if ($s.length)
+                        $s.html(vars[varName].text)
                 }
+            }
 
-                $PageWrap.addClass("open")
-            })
-        } else {
+            $PageWrap.addClass("open")
+        })
+    } else
+        convertMd(page.text, function (mdHtml) {
+            $PageText.html("")
+
+            if (page.options.cssUrl) {
+                loadCss(page.options.cssUrl)
+            }
+
+            if (page.options.typography == 'false')
+                $PageText.removeClass("typography")
+            else
+                $PageText.addClass("typography")
+
+            if (page.options.id) {
+                mdHtml = "<div id='" + page.options.id + "'>" + mdHtml + "</div>"
+            }
+
             $PageText.html(mdHtml)
             $PageWrap.addClass("open")
-        }
-    })
+
+        })
 }
