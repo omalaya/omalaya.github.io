@@ -35,21 +35,6 @@ function fixDesignAfterAsynk() {
 // Markdown
 ////////////////////////////////////////////////////
 
-function convertMd(mdText, callback) {
-    $.ajax({
-        type: "POST",
-        dataType: "html",
-        processData: false,
-        url: "https://api.github.com/markdown/raw",
-        data: mdText,
-        contentType: "text/plain",
-        success: callback,
-        error: function (jqXHR, textStatus, error) {
-            console.warn(jqXHR, textStatus, error);
-        }
-    });
-}
-
 function fixStartSpaces(str) {
     var dotCount = 0
     while (dotCount < str.length && str[dotCount] == '.')
@@ -351,24 +336,5 @@ function showPage(page) {
 
             $PageWrap.addClass("open")
         })
-    } else
-        convertMd(page.text, function (mdHtml) {
-
-            if (page.options.cssUrl) {
-                loadCss(page.options.cssUrl)
-            }
-
-            if (page.options.typography == 'false')
-                $PageText.removeClass("typography")
-            else
-                $PageText.addClass("typography")
-
-            if (page.options.id) {
-                mdHtml = "<div id='" + page.options.id + "'>" + mdHtml + "</div>"
-            }
-
-            $PageText.html(mdHtml)
-            $PageWrap.addClass("open")
-
-        })
+    }
 }
