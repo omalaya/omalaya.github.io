@@ -333,10 +333,9 @@ function showPage(page) {
                         $s.html(vars[varName].text)
                 }
             }
-
-            $PageWrap.addClass("open")
         })
     } else {
         $PageText.html(page.text)
+        $PageWrap.addClass("open")
     }
 }
