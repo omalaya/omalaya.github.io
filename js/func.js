@@ -336,5 +336,7 @@ function showPage(page) {
 
             $PageWrap.addClass("open")
         })
+    } else {
+        $PageWrap.html(page.text)
     }
 }
