@@ -13,13 +13,9 @@ var PageArg = {
     ID: "id",
     IMPORT_CSS : "import css",
     IMPORT_HTML : "import html",
-    TYPOGRAPHY: "typography"
-}
-
-var NavItem = {
-    bgColor: "#fff",
-    textColor: "#111",
-    hoverTextColor: "#fff"
+    TYPOGRAPHY: "typography",
+    VAR_START: "!!",
+    VAR_END: "!!/"
 }
 
 var Albums = null

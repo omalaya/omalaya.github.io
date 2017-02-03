@@ -78,29 +78,7 @@ function pageButton_click() {
     var page = Pages[pageId];
 
     analyzePage(pageId);
-
-    convertMd(page.text, function (html) {
-        $PageText.html("")
-
-        if (page.options.cssUrl) {
-            loadCss(page.options.cssUrl)
-        }
-
-        if (page.options.typography == 'false')
-            $PageText.removeClass("typography")
-        else
-            $PageText.addClass("typography")
-
-        if (page.options.id) {
-            $PageText.append(
-                $tag("div", page.options.id).append(html)
-            )
-        } else {
-            $PageText.html(html)
-        }
-
-        $PageWrap.addClass("open")
-    })
+    showPage(page);
 }
 
 function pageClose_click() {
@@ -184,6 +162,7 @@ function analyzePage(pageId) {
         if (tryToSearchOptions) {
             if (line.startsWith(PageArg.IMPORT_HTML)) {
                 page.options.htmlUrl = line.strAfter(PageArg.IMPORT_HTML)
+                lastOptionLineIndex = i
                 tryToSearchOptions = true
                 continue
             }
@@ -214,7 +193,7 @@ function analyzePage(pageId) {
     }
 
     // Save page text
-    if (lastOptionLineIndex > 0 && (lastOptionLineIndex + 1) < lines.length)
+    if (lastOptionLineIndex >= 0 && (lastOptionLineIndex + 1) < lines.length)
         page.text = lines.slice(lastOptionLineIndex + 1).join("\n")
     else
         page.text = lines.join("\n")
@@ -222,16 +201,19 @@ function analyzePage(pageId) {
     page.isAnalyzed = true
 }
 
-function findVariables(lines) {
+function findVariables(lines, startFrom) {
     var vars = {}
-    for (var i = 0; i < lines.length; i++) {
+    for (var i = startFrom; i < lines.length; i++) {
         var line = lines[i]
-        if (line.startsWith("&")) {
-            vars[line.strAfter("<<").trim()].startPos = i
+        if (line.startsWith(PageArg.VAR_START) &&
+            !line.startsWith(PageArg.VAR_END)) {
+            vars[line.strAfter(PageArg.VAR_START).trim()] = {startPos: i}
             continue
         }
-        if (line.startsWith(">>")) {
-            vars[line.strAfter(">>").trim()].endPos = i
+        if (line.startsWith(PageArg.VAR_END)) {
+            var varName = line.strAfter(PageArg.VAR_END).trim()
+            if (vars[varName])
+                vars[varName].endPos = i
             continue
         }
     }
@@ -246,7 +228,7 @@ function findVariables(lines) {
         }
     }
 
-    return vars
+    return $.isEmptyObject(vars) ? null : vars
 }
 ////////////////////////////////////////////////////
 // Content
@@ -334,25 +316,6 @@ function showAlbumPhotos(photos, album) {
         });
 }
 
-function showSlider() {
-    Vk.loadAlbumsThumbPhotos(function (photos) {
-        var $slider = $tag("div")
-        var $ul = $tag("ul").addClass("bxslider")
-
-        photos.forEach(function (photo) {
-            $ul.append(
-                $tag("li").append(
-                    $tag("img").attr("src", getPhotoSrc(photo, 500))
-                )
-            )
-        })
-
-        $Images.append(
-            $slider.append($ul)
-        )
-    })
-}
-
 function showPagesNav() {
     Pages.forEach(function (page) {
         $PagesNav.append(
@@ -363,4 +326,45 @@ function showPagesNav() {
     })
 
     $PagesNav.on("click", "button", pageButton_click)
+}
+
+function showPage(page) {
+    convertMd(page.text, function (mdHtml) {
+        $PageText.html("")
+
+        if (page.options.cssUrl) {
+            loadCss(page.options.cssUrl)
+        }
+
+        if (page.options.typography == 'false')
+            $PageText.removeClass("typography")
+        else
+            $PageText.addClass("typography")
+
+        page.options.vars = findVariables(mdHtml.split("\n"), 0)
+
+        if (page.options.id) {
+            mdHtml = "<div id='" + page.options.id + "'>" + mdHtml + "</div>"
+        }
+
+        if (page.options.htmlUrl) {
+            $.get(page.options.htmlUrl, function (htmlTmpl) {
+                $PageText.append(htmlTmpl)
+
+                var vars = page.options.vars;
+                for (var varName in vars) {
+                    if (vars.hasOwnProperty(varName)) {
+                        var $s = $PageText.find("#"+ varName)
+                        if ($s.length)
+                            $s.html(vars[varName].text)
+                    }
+                }
+
+                $PageWrap.addClass("open")
+            })
+        } else {
+            $PageText.html(mdHtml)
+            $PageWrap.addClass("open")
+        }
+    })
 }
