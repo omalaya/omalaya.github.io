@@ -1,0 +1,71 @@
+<link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
+
+<link rel="stylesheet" href="css/reset.css"/>
+<link rel="stylesheet" href="css/index.css"/>
+<link rel="stylesheet" href="css/typography.css"/>
+
+<link rel="stylesheet" href="lib/gallery/justifiedGallery.min.css"/>
+<link rel="stylesheet" href="lib/colorbox/colorbox.css"/>
+
+<style>
+    #contact-form {
+        background: #f6f6f6;
+        font-size: 20px;
+    }
+    #contact-form input,
+    #contact-form textarea,
+    #contact-form select {
+        border: 0;
+        display: block;
+        margin-bottom: 31px;
+        color: #888;
+        background-color: #fff;
+        margin-right: 0;
+        width: 100%;
+        padding: 17px 20px 18px 20px;
+    }
+
+    #contact-form label {
+        display: block;
+        margin: 10px 0;
+    }
+
+    #contact-form label small {
+        color: #444;
+        font-size: 15px;
+        display: block;
+    }
+
+    #ok {
+        border: none;
+        background: #333;
+        color: #f6f6f6;
+        width: 100%;
+        padding: 10px;
+        font-size: 20px;
+    }
+
+    #ok:hover {
+        background: #444;
+        color: #fff
+    }
+</style>
+
+<div id="contact">
+    <form method="post" id="contact-form" autocomplete="off">
+        <fieldset>
+            <label for="name">Ваше ім'я</label>
+            <input name="name" type="text" id="name" title="Як до вас звертатись?">
+
+            <label for="email">Як з вами зв'язатися? <small>Напишіть куди надісляти Вам відповідь: телефон, email чи посилання на соц мережу</small></label>
+            <input name="email" type="text" id="email" title="Email">
+
+            <label for="message"><span class="required">Опиз замовлення чи запитання</span></label>
+            <textarea name="message" rows="6" id="message" title="Текст повідомлення" autofocus></textarea>
+
+            <button id="ok">Відправити</button>
+
+            <span id="status"></span>
+        </fieldset>
+    </form>
+</div>

@@ -82,8 +82,8 @@ function pageButton_click() {
     convertMd(page.text, function (html) {
         $PageText.html("")
 
-        if (page.options.styleUrl) {
-            loadCss(page.options.styleUrl)
+        if (page.options.cssUrl) {
+            loadCss(page.options.cssUrl)
         }
 
         if (page.options.typography == 'false')
@@ -180,28 +180,35 @@ function analyzePage(pageId) {
     // Parse page Params
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i]
+
         if (tryToSearchOptions) {
+            if (line.startsWith(PageArg.IMPORT_HTML)) {
+                page.options.htmlUrl = line.strAfter(PageArg.IMPORT_HTML)
+                tryToSearchOptions = true
+                continue
+            }
             if (line.startsWith(PageArg.ID)) {
                 page.options.id = line.strAfter(PageArg.ID)
                 lastOptionLineIndex = i
+                tryToSearchOptions = true
                 continue
             }
-            if (line.startsWith(PageArg.STYLE_URL)) {
-                page.options.styleUrl = line.strAfter(PageArg.STYLE_URL)
+            if (line.startsWith(PageArg.IMPORT_CSS)) {
+                page.options.cssUrl = line.strAfter(PageArg.IMPORT_CSS)
                 lastOptionLineIndex = i
+                tryToSearchOptions = true
                 continue
             }
             if (line.startsWith(PageArg.TYPOGRAPHY)) {
                 page.options.typography = line.strAfter(PageArg.TYPOGRAPHY)
                 lastOptionLineIndex = i
+                tryToSearchOptions = true
                 continue
             }
-            if (line.startsWith("text")) {
-                lastOptionLineIndex = i
-                tryToSearchOptions = false
-                continue
-            }
+
+            tryToSearchOptions = false
         }
+
         // Fix spaces
         lines[i] = fixStartSpaces(line)
     }
@@ -215,6 +222,32 @@ function analyzePage(pageId) {
     page.isAnalyzed = true
 }
 
+function findVariables(lines) {
+    var vars = {}
+    for (var i = 0; i < lines.length; i++) {
+        var line = lines[i]
+        if (line.startsWith("&")) {
+            vars[line.strAfter("<<").trim()].startPos = i
+            continue
+        }
+        if (line.startsWith(">>")) {
+            vars[line.strAfter(">>").trim()].endPos = i
+            continue
+        }
+    }
+
+    for (var varName in vars) {
+        if (vars.hasOwnProperty(varName)) {
+            var v = vars[varName];
+
+            v.text = (v.startPos >= 0 && v.endPos >= 0)
+                ? lines.slice(v.startPos + 1, v.endPos).join("\n")
+                : ""
+        }
+    }
+
+    return vars
+}
 ////////////////////////////////////////////////////
 // Content
 ////////////////////////////////////////////////////
@@ -247,8 +280,6 @@ function showAlbumsNav(albumsArray) {
 
     $Nav.append($ul)
 
-    // $Nav.on("mouseenter", "li", navItem_mouseenter)
-    // $Nav.on("mouseleave", "li", navItem_mouseleave)
     $Nav.on("click", "li", album_click)
 }
 

@@ -85,7 +85,7 @@ Vk.loadPages = function (callback) {
                 firstBr = (firstBr < 0) ? post.text.length : firstBr
 
                 var pageTitle = post.text.substr(0, firstBr).strAfter("page")
-                var pageText = post.text.substr(firstBr)
+                var pageText = post.text.substr(firstBr + 1)
 
                 Pages.push({
                     id: i,

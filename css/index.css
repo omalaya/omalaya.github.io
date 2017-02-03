@@ -39,7 +39,6 @@ body {
     border-color: #f6f6f6;
 }
 
-
 .page-text-wrap {
     width: 0;
     background: rgba(246, 246, 246, 0.9);
@@ -48,12 +47,12 @@ body {
     top: 57px;
     right: 50%;
     -webkit-transform-origin: 100% 0;
-    transform-origin: 100% 0;
     -webkit-transition-property: width, top, right;
-    transition-property: width, top, right;
     -webkit-transition-duration: 0.5s;
-    transition-duration: 0.5s;
     -webkit-transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+    transform-origin: 100% 0;
+    transition-property: width, top, right;
+    transition-duration: 0.5s;
     transition-timing-function: cubic-bezier(0.7,0,0.3,1);
 }
 
@@ -79,7 +78,7 @@ body {
 .page-text-wrap.open .page-text {
     opacity: 1;
     height: auto;
-    overflow: visible; /* this breaks the transition of the children in FF: https://bugzilla.mozilla.org/show_bug.cgi?id=625289 */
+    overflow: visible;
     pointer-events: auto;
     -webkit-transition: opacity 0.3s 0.5s;
     transition: opacity 0.3s 0.5s;

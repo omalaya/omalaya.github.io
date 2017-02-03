@@ -11,7 +11,8 @@ var AlbumArg = {
 
 var PageArg = {
     ID: "id",
-    STYLE_URL : "style url",
+    IMPORT_CSS : "import css",
+    IMPORT_HTML : "import html",
     TYPOGRAPHY: "typography"
 }
 
