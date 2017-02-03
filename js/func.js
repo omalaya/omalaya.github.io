@@ -315,6 +315,19 @@ function showPagesNav() {
 function showPage(page) {
     $PageText.html("")
 
+    if (page.options.cssUrl) {
+        loadCss(page.options.cssUrl)
+    }
+
+    if (page.options.typography == 'false')
+        $PageText.removeClass("typography")
+    else
+        $PageText.addClass("typography")
+
+    if (page.options.id) {
+        page.text = "<div id='" + page.options.id + "'>" + page.text + "</div>"
+    }
+
     if (page.options.htmlUrl) {
 
         page.options.vars = findVariables(page.text.split("\n"), 0)
