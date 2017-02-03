@@ -328,6 +328,7 @@ function showPagesNav() {
 }
 
 function showPage(page) {
+    $PageText.html("")
 
     if (page.options.htmlUrl) {
 
@@ -352,7 +353,6 @@ function showPage(page) {
         })
     } else
         convertMd(page.text, function (mdHtml) {
-            $PageText.html("")
 
             if (page.options.cssUrl) {
                 loadCss(page.options.cssUrl)
