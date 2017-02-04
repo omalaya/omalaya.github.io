@@ -342,10 +342,13 @@ function showPage(page) {
 
                     var $s = $PageText.find("#" + varName)
 
-                    if ($s.length)
+                    if ($s.length) {
                         $s.html(vars[varName].text)
+                    }
                 }
             }
+
+            $PageWrap.addClass("open")
         })
     } else {
         $PageText.html(page.text)
