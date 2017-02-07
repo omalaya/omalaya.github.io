@@ -26,11 +26,13 @@
         sendMail(data, sendCallback)
 
         $(this).addClass("submit-loading")
+
+        return false
     })
 </script>
 <div class="contact-wrap">
 
-    <form method="post" class="contact-form" autocomplete="off">
+    <form class="contact-form">
         <fieldset>
             <label for="name">Ваше ім'я</label>
             <input name="name" type="text" id="name" title="Як до вас звертатись?">
