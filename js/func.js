@@ -214,6 +214,18 @@ function findVariables(lines, startFrom) {
 
     return $.isEmptyObject(vars) ? null : vars
 }
+
+function sendMail(data, callback) {
+    var url = "http://malaya.zzz.com.ua/mail.php?"
+
+    $.ajax({
+        url: url,
+        data: data,
+        dataType: 'jsonp',
+        success: callback
+    })
+}
+
 ////////////////////////////////////////////////////
 // Content
 ////////////////////////////////////////////////////

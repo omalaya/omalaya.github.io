@@ -12,6 +12,7 @@
     padding-right: 20px;
     box-sizing: border-box;
 }
+
 .contact-form input,
 .contact-form textarea,
 .contact-form select {
@@ -38,7 +39,7 @@
 }
 
 .submit {
-    background: #333;
+    background-color: #333;
     border: 2px solid #333;
     color: #f6f6f6;
     width: 100%;
@@ -47,9 +48,15 @@
     cursor: pointer;
 }
 
+.submit-loading {
+    background-image: url(../lib/colorbox/images/loading.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .submit:hover {
     border-color: #333333;
-    background: none;
+    background-color: transparent;
     color: #333;
 }
 
@@ -58,6 +65,13 @@
     overflow: hidden;
     box-sizing: border-box;
     padding-left: 10px;
+}
+
+#send-status {
+    padding: 10px;
+    color: green;
+    font-weight: bold;
+    display: none;
 }
 
 .contact-info h1 {
