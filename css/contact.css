@@ -67,8 +67,12 @@
     padding-left: 10px;
 }
 
-#send-status {
+#send-status-wrapper {
     padding: 10px;
+    text-align: center;
+}
+
+#send-status {
     color: green;
     font-weight: bold;
     display: none;
