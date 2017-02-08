@@ -206,10 +206,12 @@ header h2 {
     left: 0;
     right: 0;
     top: 0;
+    opacity: 0.7;
 }
 
 .stick ul:hover {
     max-height: none;
+    opacity: 1;
 }
 
 .stick ul li {
