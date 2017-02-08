@@ -19,6 +19,9 @@ $(function () {
             message: $inputMessage.text()
         }
 
+        console.log("Sending data")
+        console.log(data)
+
         sendMail(data, sendCallback)
 
         $(this).addClass("submit-loading")

@@ -215,12 +215,13 @@ function findVariables(lines, startFrom) {
     return $.isEmptyObject(vars) ? null : vars
 }
 
-function sendMail(data, callback) {
+function sendMail(paramsObj, callback) {
     var url = "http://malaya.zzz.com.ua/mail.php"
 
     $.ajax({
         url: url,
-        data: data,
+        method: 'GET',
+        data: paramsObj,
         dataType: 'jsonp',
         success: callback
     })
