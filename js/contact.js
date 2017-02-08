@@ -10,7 +10,7 @@ $(function () {
         $sendStatus.fadeIn()
         $sendButton.removeClass("submit-loading")
         $sendStatus.delay(3000).fadeOut()
-        $sendButton.find("span").show()
+        $sendButton.find("span").css("opacity", "1")
 
         console.log("Success. Return:")
         console.log(data)
@@ -28,7 +28,7 @@ $(function () {
 
         sendMail(data, sendCallback)
 
-        $(this).find("span").hide()
+        $(this).find("span").css("opacity", "0")
         $(this).addClass("submit-loading")
 
         return false
