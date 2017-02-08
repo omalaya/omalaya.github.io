@@ -14,13 +14,13 @@ $(function () {
 
     $sendButton.click(function () {
         var data = {
-            name: $inputName.text(),
-            contact: $inputContact.text(),
-            message: $inputMessage.text()
+            name: $inputName.val(),
+            contact: $inputContact.val(),
+            message: $inputMessage.val()
         }
 
         console.log("Sending data")
-        console.log(data)
+        console.log(data);
 
         sendMail(data, sendCallback)
 
