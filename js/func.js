@@ -216,7 +216,7 @@ function findVariables(lines, startFrom) {
 }
 
 function sendMail(data, callback) {
-    var url = "http://malaya.zzz.com.ua/mail.php?"
+    var url = "http://malaya.zzz.com.ua/mail.php"
 
     $.ajax({
         url: url,
