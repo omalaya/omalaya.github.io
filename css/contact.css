@@ -97,3 +97,7 @@
 #contact-phone {
     font-size: 30px;
 }
+
+#contact-social a {
+    margin-right: 16px;
+}
