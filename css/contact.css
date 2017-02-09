@@ -91,5 +91,9 @@
 
 .contact-info .mail {
     margin: 20px 0;
+}
+
+#contact-email,
+#contact-phone {
     font-size: 30px;
 }
