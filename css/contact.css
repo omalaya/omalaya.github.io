@@ -103,5 +103,5 @@
 }
 
 #contact-social img {
-    max-width: 48px;
+    max-width: 48px !important;
 }
