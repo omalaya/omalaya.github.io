@@ -101,3 +101,7 @@
 #contact-social a {
     margin-right: 16px;
 }
+
+#contact-social img {
+    max-width: 48px;
+}
