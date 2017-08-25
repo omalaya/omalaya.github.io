@@ -1,5 +1,6 @@
 const DefaultGroupId = "138622410"
 var GroupId = '-' + DefaultGroupId
+var AccessToken = "e9e2f138e9e2f138e9e2f138d7e9b03dc5ee9e2e9e2f138b0428fcd6089e02f4836e7f0"
 
 var DefaultAlbumColor = "#757575"
 

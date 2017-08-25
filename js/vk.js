@@ -70,7 +70,7 @@ Vk.loadAlbumsThumbPhotos = function (callback) {
 
 Vk.loadPages = function (callback) {
 
-    var methodArgs = "owner_id=" + GroupId + "&count=100"
+    var methodArgs = "owner_id=" + GroupId + "&count=100" + "&access_token=" + AccessToken
 
     Vk.call("wall.get", methodArgs, function (data) {
         if (!data.response) return
